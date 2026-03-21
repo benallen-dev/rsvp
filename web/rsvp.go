@@ -8,9 +8,17 @@ import (
 	"github.com/charmbracelet/log"
 )
 
+func getRsvpIndex(w http.ResponseWriter, r *http.Request) {
+	log.Info("GET /rsvp",)
+
+	w.Write([]byte("TODO: Render RSVP template"))
+}
+
 func getRsvp(w http.ResponseWriter, r *http.Request) {
 	inviteId := r.PathValue("inviteId")
 	log.Info("GET /rsvp", "inviteId", inviteId)
+
+
 	w.Write([]byte("TODO: Render RSVP template"))
 }
 

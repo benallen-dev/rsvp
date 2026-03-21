@@ -3,19 +3,17 @@ package invite
 import "github.com/google/uuid"
 
 type Invite struct {
-	id      uuid.UUID
-	name    string
-	day     bool
-	evening bool
+	Id      uuid.UUID
+	Name    string
+	Day     bool
+	Evening bool
 }
 
 func NewInvite(name string, fullDay bool) *Invite {
 	return &Invite{
-		id:      uuid.New(),
-		name:    name,
-		day:     fullDay,
-		evening: true,
+		Id:      uuid.New(),
+		Name:    name,
+		Day:     fullDay,
+		Evening: true,
 	}
 }
-
-

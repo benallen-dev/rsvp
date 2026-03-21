@@ -1,9 +1,9 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/charmbracelet/log"
 	_ "github.com/mattn/go-sqlite3"
@@ -14,21 +14,43 @@ import (
 
 const PORT = ":8080"
 
-func createNewListOfInvitees() {
-	// Write to disk
-
+func chanConsumer(c chan string) {
+	for msg := range c {
+		log.Infof("Received: %s", msg)
+	}
+	log.Info("Channel closed")
 }
 
 func main() {
-	db, err := sql.Open("sqlite3", "./rsvp.db")
+	log.Info("Starting")
+
+	// Start database
+	s, closedb, err := store.Init("./test-data.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer closedb()
+	data, err := s.ReadAllInvitesWithRSVPs()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	store.InitDb(db)
-	log.Fatal("exiting early")
+	for _, invite := range data {
 
+		fmt.Println(invite)
+	}
+
+	// Experiment chan listening
+	myChan := make(chan string)
+	go chanConsumer(myChan)
+
+	myChan <- "hello"
+	myChan <- "world"
+	close(myChan)
+
+	time.Sleep(5000)
+
+	// Start web server
 	mux := web.NewMux()
 
 	fmt.Println("listening on " + PORT)

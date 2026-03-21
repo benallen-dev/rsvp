@@ -13,6 +13,7 @@ type RSVP struct {
 	Timestamp        time.Time `json:"-"`
 	AttendingDay     bool      `json:"attendingDay"`
 	AttendingEvening bool      `json:"attendingEvening"`
+	HasPresentation  bool	   `json:"hasPresentation"`
 	DietNotes        string    `json:"dietNotes"`
 	Message          string    `json:"message"`
 }
