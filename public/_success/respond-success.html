@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Respond to Invite</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
+	<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<style type="text/tailwindcss">
+		@theme {
+			--font-heading: "Hammersmith One", sans-serif;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			font-family: var(--font-heading);
+		}
+	</style>
+</head>
+<body class="bg-white min-h-screen p-8">
+	<div class="max-w-2xl mx-auto">
+		<h1 class="text-4xl font-bold text-slate-600 mb-8">Respond to Invitation</h1>
+		
+		<!-- Success Summary Box -->
+		<div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+			<div class="flex items-start gap-3 mb-4">
+				<div class="text-2xl">✓</div>
+				<div>
+					<h2 class="text-xl font-semibold text-green-900">Response recorded!</h2>
+					<p class="text-sm text-green-700">We've received your RSVP for {{.Invite.DisplayName}}</p>
+				</div>
+			</div>
+
+			<div class="space-y-4 mt-6 pt-6 border-t border-green-200">
+				{{range $idx, $person := .Invite.People}}
+				<div class="bg-white rounded p-4 border border-green-100">
+					<div class="font-semibold text-slate-800 mb-3">{{$person.FullName}}</div>
+					{{$attendance := $.RSVP.GetPersonAttendance $idx}}
+					{{if $attendance}}
+						{{if $.Invite.Day}}
+						<div class="flex items-center gap-2 mb-2">
+							{{if $attendance.AttendingDay}}
+								<span class="text-green-600 font-bold">✓</span>
+								<span class="text-slate-700">Attending day event</span>
+							{{else}}
+								<span class="text-slate-400 font-bold">—</span>
+								<span class="text-slate-400">Not attending day event</span>
+							{{end}}
+						</div>
+						{{end}}
+						{{if $.Invite.Evening}}
+						<div class="flex items-center gap-2">
+							{{if $attendance.AttendingEvening}}
+								<span class="text-green-600 font-bold">✓</span>
+								<span class="text-slate-700">Attending evening event</span>
+							{{else}}
+								<span class="text-slate-400 font-bold">—</span>
+								<span class="text-slate-400">Not attending evening event</span>
+							{{end}}
+						</div>
+						{{end}}
+					{{end}}
+				</div>
+				{{end}}
+
+				{{if .RSVP.HasPresentation}}
+				<div class="flex items-center gap-2 bg-blue-50 rounded p-4 border border-blue-200">
+					<span class="text-blue-600 font-bold">✓</span>
+					<div class="text-slate-700">
+						<span>Will deliver a presentation</span>
+						<div class="text-sm text-slate-600 mt-1">Phone: <span class="font-mono">{{.RSVP.PhoneNumber}}</span></div>
+					</div>
+				</div>
+				{{end}}
+
+				{{if .RSVP.DietNotes}}
+				<div class="flex items-start gap-2 bg-amber-50 rounded p-4 border border-amber-200">
+					<span class="text-amber-600 font-bold">•</span>
+					<div class="text-slate-700">
+						<div class="font-medium text-sm text-slate-500">Dietary requirements</div>
+						<div>{{.RSVP.DietNotes}}</div>
+					</div>
+				</div>
+				{{end}}
+
+				{{if .RSVP.Message}}
+				<div class="flex items-start gap-2 bg-slate-50 rounded p-4 border border-slate-200">
+					<span class="text-slate-400 font-bold">•</span>
+					<div class="text-slate-700">
+						<div class="font-medium text-sm text-slate-500">Message</div>
+						<div>{{.RSVP.Message}}</div>
+					</div>
+				</div>
+				{{end}}
+			</div>
+
+			<div class="text-xs text-green-600 mt-6 pt-6 border-t border-green-200">
+				You can edit your response at any time by filling out the form again.
+			</div>
+		</div>
+
+		<div class="text-center mt-8">
+			<a href="/respond" class="text-blue-600 hover:text-blue-700 font-semibold">← Back to respond form</a>
+		</div>
+	</div>
+</body>
+</html>

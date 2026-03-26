@@ -1,0 +1,123 @@
+<form hx-post="/rsvp/{{.Invite.Id}}" hx-target="body" hx-swap="innerHTML" class="space-y-6">
+	<!-- Hidden field to indicate if person 1 exists -->
+	{{if gt (len .Invite.People) 1}}
+	<input type="hidden" name="hasPerson1" value="true">
+	{{end}}
+
+	<!-- Person 0 (always shown) -->
+	<fieldset class="border-2 border-blue-300 rounded-lg p-5 bg-blue-50">
+		<legend class="text-base font-bold text-blue-800 px-3">{{(index .Invite.People 0).FullName}}</legend>
+		
+		{{if .Invite.Day}}
+		<div class="mb-4">
+			<h3 class="text-sm font-semibold text-slate-700 mb-2">Day Event</h3>
+			<label class="flex items-center gap-3 cursor-pointer">
+				<input type="checkbox" name="person0AttendingDay" class="w-5 h-5">
+				<span class="text-slate-700">Will attend</span>
+			</label>
+		</div>
+		{{end}}
+
+		{{if .Invite.Evening}}
+		<div class="mb-4">
+			<h3 class="text-sm font-semibold text-slate-700 mb-2">Evening Event</h3>
+			<label class="flex items-center gap-3 cursor-pointer">
+				<input type="checkbox" name="person0AttendingEvening" class="w-5 h-5">
+				<span class="text-slate-700">Will attend</span>
+			</label>
+		</div>
+		{{end}}
+	</fieldset>
+
+	<!-- Person 1 (shown if exists) -->
+	{{if gt (len .Invite.People) 1}}
+	<fieldset class="border-2 border-purple-300 rounded-lg p-5 bg-purple-50">
+		<legend class="text-base font-bold text-purple-800 px-3">{{(index .Invite.People 1).FullName}}</legend>
+		
+		{{if .Invite.Day}}
+		<div class="mb-4">
+			<h3 class="text-sm font-semibold text-slate-700 mb-2">Day Event</h3>
+			<label class="flex items-center gap-3 cursor-pointer">
+				<input type="checkbox" name="person1AttendingDay" class="w-5 h-5">
+				<span class="text-slate-700">Will attend</span>
+			</label>
+		</div>
+		{{end}}
+
+		{{if .Invite.Evening}}
+		<div class="mb-4">
+			<h3 class="text-sm font-semibold text-slate-700 mb-2">Evening Event</h3>
+			<label class="flex items-center gap-3 cursor-pointer">
+				<input type="checkbox" name="person1AttendingEvening" class="w-5 h-5">
+				<span class="text-slate-700">Will attend</span>
+			</label>
+		</div>
+		{{end}}
+	</fieldset>
+	{{end}}
+
+	<!-- Shared fields -->
+	<fieldset class="border border-slate-300 rounded-lg p-4">
+		<legend class="text-sm font-semibold text-slate-700 px-2">Additional Information</legend>
+		
+		<div class="mb-4">
+			<label class="flex items-center gap-3 cursor-pointer">
+				<input type="checkbox" name="hasPresentation" id="has-presentation" class="w-5 h-5">
+				<span class="text-slate-700 font-medium">I have a speech or performance to share</span>
+			</label>
+
+			<div id="phone-field" class="hidden mt-3 ml-8 space-y-2">
+				<label for="phone-number" class="block text-sm font-semibold text-slate-700">
+					Phone number for coordination <span class="text-red-600">*</span>
+				</label>
+				<input type="tel" id="phone-number" name="phoneNumber" placeholder="555-1234"
+					class="w-full border border-slate-300 rounded px-4 py-2">
+				<p class="text-xs text-slate-500">We'll use this to contact you about scheduling your presentation</p>
+			</div>
+		</div>
+
+		<div class="space-y-2">
+			<label for="diet-notes" class="block text-sm font-semibold text-slate-700">
+				Dietary requirements
+			</label>
+			<textarea id="diet-notes" name="dietNotes" placeholder="e.g., vegetarian, gluten-free, allergies..."
+				rows="2" class="w-full border border-slate-300 rounded px-4 py-2"></textarea>
+		</div>
+	</fieldset>
+
+	<div class="space-y-2">
+		<label for="message" class="block text-sm font-semibold text-slate-700">
+			Message
+		</label>
+		<textarea id="message" name="message" placeholder="Any additional thoughts or questions?" rows="3"
+			class="w-full border border-slate-300 rounded px-4 py-2"></textarea>
+	</div>
+
+	<div class="pt-4">
+		<button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded">
+			Submit Response
+		</button>
+	</div>
+
+	<p class="text-xs text-slate-500 pt-2">
+		You can submit multiple responses to update your answer at any time.
+	</p>
+</form>
+
+<script>
+	// Show/hide phone number field based on presentation checkbox
+	document.addEventListener('change', function (e) {
+		if (e.target.id === 'has-presentation') {
+			const phoneField = document.getElementById('phone-field');
+			const phoneInput = document.getElementById('phone-number');
+
+			if (e.target.checked) {
+				phoneField.classList.remove('hidden');
+				phoneInput.required = true;
+			} else {
+				phoneField.classList.add('hidden');
+				phoneInput.required = false;
+			}
+		}
+	});
+</script>

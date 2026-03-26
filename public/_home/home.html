@@ -1,0 +1,68 @@
+{{define "home"}}<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Ben & Maaike 28-08-26</title>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
+
+	<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+	<style type="text/tailwindcss">
+		@theme {
+			--font-heading: "Hammersmith One", sans-serif;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			font-family: var(--font-heading);
+		}
+		
+		/* Timeline line */
+		.timeline-line {
+			position: absolute;
+			left: 1.5rem;
+			top: 0;
+			bottom: 0;
+			width: 2px;
+		}
+		
+		/* Timeline dot */
+		.timeline-dot {
+			position: absolute;
+			left: 1rem;
+			width: 1rem;
+			height: 1rem;
+			border-radius: 9999px;
+			top: 0;
+		}
+		
+		/* Sticky footer */
+		.sticky-rsvp-footer {
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			left: 0;
+			background: white;
+			border-top: 1px solid rgb(226, 232, 240);
+			padding: 1rem;
+			box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+			z-index: 40;
+		}
+	</style>
+</head>
+
+<body class="bg-white min-h-screen">
+	{{template "hero" .}}
+	{{template "timeline" .}}
+	{{template "directions" .}}
+	{{template "dresscode" .}}
+	{{template "contact" .}}
+	{{template "rsvp-cta" .}}
+	{{template "sticky-footer" .}}
+</body>
+
+</html>
+{{end}}

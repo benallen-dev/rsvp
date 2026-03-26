@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Invites</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
+	<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<style type="text/tailwindcss">
+		@theme {
+			--font-heading: "Hammersmith One", sans-serif;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			font-family: var(--font-heading);
+		}
+	</style>
+</head>
+<body class="bg-white min-h-screen p-8">
+	<div class="max-w-6xl mx-auto">
+		<h1 class="text-4xl font-bold text-slate-600 mb-8">Invites</h1>
+		
+	<!-- Table Header -->
+	<div class="mb-2 bg-slate-100 border border-slate-300 px-4 py-3 flex gap-4 items-center">
+		<div class="flex-1 font-semibold text-slate-700">Name</div>
+		<div class="text-center w-24 font-semibold text-slate-700">Day Event</div>
+		<div class="text-center w-24 font-semibold text-slate-700">Evening Event</div>
+		<div class="text-center w-24 font-semibold text-slate-700">RSVPs</div>
+		<div class="text-center w-24 font-semibold text-slate-700">Day Attendees</div>
+		<div class="text-center w-24 font-semibold text-slate-700">Evening Attendees</div>
+	</div>
+
+	<div class="space-y-2">
+		{{range .Invites}}
+		<details class="border border-slate-300">
+			<summary class="bg-slate-100 hover:bg-slate-200 cursor-pointer px-4 py-3 flex gap-4 items-center">
+				<div class="flex-1">{{.Invite.DisplayName}}</div>
+				<div class="text-center w-24">
+					{{if eq (len .RSVPs) 0}}
+						<span class="text-slate-400">?</span>
+					{{else}}
+						{{$latest := .LatestRSVP}}
+						{{if gt (len $latest.Attendances) 0}}
+							{{if (index $latest.Attendances 0).AttendingDay}}
+								<span class="text-green-600">✓</span>
+							{{else}}
+								<span class="text-red-600">✗</span>
+							{{end}}
+						{{end}}
+					{{end}}
+				</div>
+				<div class="text-center w-24">
+					{{if eq (len .RSVPs) 0}}
+						<span class="text-slate-400">?</span>
+					{{else}}
+						{{$latest := .LatestRSVP}}
+						{{if gt (len $latest.Attendances) 0}}
+							{{if (index $latest.Attendances 0).AttendingEvening}}
+								<span class="text-green-600">✓</span>
+							{{else}}
+								<span class="text-red-600">✗</span>
+							{{end}}
+						{{end}}
+					{{end}}
+				</div>
+			<div class="text-center w-24">{{len .RSVPs}}</div>
+			<div class="text-center w-24">
+				{{if eq (len .RSVPs) 0}}
+					<span class="text-slate-400">?</span>
+				{{else}}
+					{{.DayAttendees}}
+				{{end}}
+			</div>
+			<div class="text-center w-24">
+				{{if eq (len .RSVPs) 0}}
+					<span class="text-slate-400">?</span>
+				{{else}}
+					{{.EveningAttendees}}
+				{{end}}
+			</div>
+			</summary>
+
+			<div class="px-4 py-3 bg-slate-50 border-t border-slate-300">
+				{{if eq (len .RSVPs) 0}}
+					<p class="text-slate-500 italic">No RSVPs yet</p>
+				{{else}}
+					<div class="ml-4">
+						<h4 class="font-semibold mb-3">RSVPs:</h4>
+						<table class="w-full text-sm">
+							<thead>
+								<tr class="border-b border-slate-200">
+									<th class="text-left py-2">Submitted</th>
+									<th class="text-left py-2">Person</th>
+									<th class="text-center py-2">Day</th>
+									<th class="text-center py-2">Evening</th>
+									<th class="text-left py-2">Diet Notes</th>
+									<th class="text-left py-2">Message</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{range $rsvp := .RSVPs}}
+									{{range $attendance := $rsvp.Attendances}}
+									<tr class="border-b border-slate-200">
+										<td class="py-2">{{$rsvp.Timestamp.Format "Jan 2, 2006"}}</td>
+										<td class="py-2 text-slate-700">
+											{{if lt $attendance.PersonIndex (len $.Invite.People)}}
+												{{(index $.Invite.People $attendance.PersonIndex).FirstName}}
+											{{end}}
+										</td>
+										<td class="text-center py-2">
+											{{if $attendance.AttendingDay}}
+												<span class="text-green-600">✓</span>
+											{{else}}
+												<span class="text-slate-300">—</span>
+											{{end}}
+										</td>
+										<td class="text-center py-2">
+											{{if $attendance.AttendingEvening}}
+												<span class="text-green-600">✓</span>
+											{{else}}
+												<span class="text-slate-300">—</span>
+											{{end}}
+										</td>
+										<td class="py-2">{{if $rsvp.DietNotes}}<span class="text-slate-600">{{$rsvp.DietNotes}}</span>{{else}}<span class="text-slate-300">—</span>{{end}}</td>
+										<td class="py-2">{{if $rsvp.Message}}<span class="text-slate-600">{{$rsvp.Message}}</span>{{else}}<span class="text-slate-300">—</span>{{end}}</td>
+									</tr>
+									{{end}}
+								{{end}}
+							</tbody>
+						</table>
+					</div>
+				{{end}}
+			</div>
+		</details>
+		{{end}}
+	</div>
+
+	<div class="mt-12 pt-8 border-t border-slate-300">
+		<h2 class="text-2xl font-bold text-slate-600 mb-6">Summary</h2>
+		<div class="grid grid-cols-2 gap-8 max-w-md">
+			<div>
+				<div class="text-4xl font-bold text-slate-700">{{.DayAttendees}}</div>
+				<div class="text-slate-500">Attending Day Event</div>
+			</div>
+			<div>
+				<div class="text-4xl font-bold text-slate-700">{{.EveningAttendees}}</div>
+				<div class="text-slate-500">Attending Evening Event</div>
+			</div>
+		</div>
+		<p class="text-sm text-slate-400 mt-4">Based on the most recent RSVP per invite</p>
+	</div>
+	</div>
+</body>
+</html>
