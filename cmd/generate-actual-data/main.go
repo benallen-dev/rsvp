@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
@@ -22,7 +21,10 @@ func main() {
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS invites (
 			id TEXT PRIMARY KEY,
-			name TEXT NOT NULL,
+			person_0_first_name TEXT NOT NULL,
+			person_0_last_name TEXT NOT NULL,
+			person_1_first_name TEXT,
+			person_1_last_name TEXT,
 			day BOOLEAN,
 			evening BOOLEAN
 		)
@@ -36,8 +38,10 @@ func main() {
 			id TEXT PRIMARY KEY,
 			invite_id TEXT NOT NULL,
 			timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-			attending_day BOOLEAN,
-			attending_evening BOOLEAN,
+			person_0_attending_day BOOLEAN,
+			person_0_attending_evening BOOLEAN,
+			person_1_attending_day BOOLEAN,
+			person_1_attending_evening BOOLEAN,
 			has_presentation BOOLEAN,
 			phone_number TEXT,
 			diet_notes TEXT,
@@ -55,15 +59,104 @@ func main() {
 
 	// Create invites
 	invites := []struct {
-		name    string
-		day     bool
-		evening bool
+		firstName string
+		lastName  string
+		day       bool
+		evening   bool
 	}{
-		{"Sarah Johnson (Evening)", false, true},
-		{"Michael Chen", true, true},
-		{"Emma Williams", true, true},
-		{"James Rodriguez (Evening)", false, true},
-		{"Lisa Anderson", true, true},
+		// Day guests
+		{"Karin", "Gronsveld", true, true},
+		{"Marijke", "Valkenburg", true, true},
+		{"Simon", "Knot", true, true},
+		{"Diana", "Hendriks", true, true},
+		{"Rod", "Allen", true, true},
+		{"Marja", "Allen", true, true},
+		{"Alexander", "Allen", true, true},
+		{"Romy", "Schoemakers", true, true},
+		{"Victoria", "Moek", true, true},
+		{"Kevin", "Bouhuizen", true, true},
+		{"Nina", "van Huizen", true, true},
+		{"Charley", "Bakker", true, true},
+		{"Bram", "van Huizen", true, true},
+		{"Denise", "Komen", true, true},
+		{"Rafael", "Endeman", true, true},
+		{"Joost", "Kerpels", true, true},
+		{"Naomi", "du Pree", true, true},
+		{"Jeroen", "Ouweneel", true, true},
+		{"Matthijs", "Alderliesten", true, true},
+		{"Roel", "de Rijk", true, true},
+		{"Matthijs", "Weskin", true, true},
+		{"Reinier", "Zwikker", true, true},
+		{"Tom", "van Dijk", true, true},
+		{"Tim", "Velzeboer", true, true},
+		{"Chris", "Bootsman", true, true},
+		{"Tim", "Verzeide", true, true},
+		{"Natasja", "Oostrum", true, true},
+		// Evening guests
+		{"Jolien", "Steenweg", false, true},
+		{"Sabine", "de Richemont", false, true},
+		{"Hans", "Gouw", false, true},
+		{"Hilda", "Gouw", false, true},
+		{"Jan-Willem", "'t Hart", false, true},
+		{"Bonnie", "'t Hart", false, true},
+		{"Henriëtte", "Knot", false, true},
+		{"Joey", "Kempff", false, true},
+		{"Vera", "Gouw", false, true},
+		{"Jasper", "Hentzen", false, true},
+		{"Anita", "van der Ploeg", false, true},
+		{"Merel", "Demenint", false, true},
+		{"Niels", "Heisterkamp", false, true},
+		{"Michelle", "(Niels +1)", false, true},
+		{"Mo", "de Ruijter", false, true},
+		{"Nieneke", "de Ruijter", false, true},
+		{"Job", "van der Weide", false, true},
+		{"Shelley", "Rijnenberg", false, true},
+		{"Melany", "Thunnissen", false, true},
+		{"Keyla", "Cornes-Maduro", false, true},
+		{"Joël", "Kema", false, true},
+		{"Nicholas", "Molenaar", false, true},
+		{"Sander", "Liebens", false, true},
+		{"Nynke", "de Rover", false, true},
+		{"Erik", "Gronsveld", false, true},
+		{"Monica", "Gronsveld", false, true},
+		{"Marit", "Gronsveld", false, true},
+		{"Joseph", "Verburg", false, true},
+		{"Jennie", "Christiaanse", false, true},
+		{"Mandy", "Klapwijk", false, true},
+		{"Menno", "van Lopik", false, true},
+		{"Dennis", "Roepman", false, true},
+		{"Cindy", "Roepman", false, true},
+		{"Silvano", "Roepman", false, true},
+		{"Tony", "Roepman", false, true},
+		{"Ilse", "Roepman", false, true},
+		{"Kevin", "Roepman", false, true},
+		{"Sabine", "Roepman", false, true},
+		{"Britt", "Hendriks", false, true},
+		{"Jenny", "Taube", false, true},
+		{"Alison", "Taube", false, true},
+		{"Kasper", "van Steveninck", false, true},
+		{"Kasper", "+ 1", false, true},
+		{"Michel", "", false, true},
+		{"Tessy", "", false, true},
+		{"Jasper", "Boot", false, true},
+		{"Wendy", "", false, true},
+		{"Rico", "", false, true},
+		{"Mea", "", false, true},
+		{"Sjoerd", "", false, true},
+		{"Maartje", "", false, true},
+		{"Cynthia", "Slotboom", false, true},
+		{"Marco", "Gronsveld", false, true},
+		{"Wouter", "van Mierlo", false, true},
+		{"Manon", "Speulman", false, true},
+		{"Nienke", "van Dam", false, true},
+		{"Elise", "Hoffman", false, true},
+		{"Jitske", "", false, true},
+		{"Kiki", "", false, true},
+		{"Cath", "", false, true},
+		{"Lianne", "", false, true},
+		{"Pepijn", "", false, true},
+		{"Daniel", "Melton", false, true},
+		{"Mia", "Urem", false, true},
 	}
 
 	inviteIDs := make([]string, len(invites))
@@ -73,72 +166,19 @@ func main() {
 		inviteIDs[i] = id
 
 		_, err = db.Exec(
-			"INSERT INTO invites (id, name, day, evening) VALUES (?, ?, ?, ?)",
-			id, inv.name, inv.day, inv.evening,
+			"INSERT INTO invites (id, person_0_first_name, person_0_last_name, person_1_first_name, person_1_last_name, day, evening) VALUES (?, ?, ?, ?, ?, ?, ?)",
+			id, inv.firstName, inv.lastName, nil, nil, inv.day, inv.evening,
 		)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("Created invite: %s (%s)\n", inv.name, id)
-	}
-
-	// Create RSVPs with realistic distribution
-	rsvpData := []struct {
-		inviteIdx        int
-		attendingDay     bool
-		attendingEvening bool
-		hasPresentation  bool
-		phoneNumber      string
-		dietNotes        string
-		message          string
-		hoursOffset      int
-	}{
-		// Invite 0 (Sarah): 0 RSVPs
-		// Invite 1 (Michael): 1 RSVP
-		{1, true, true, false, "", "Vegetarian", "Really looking forward to it!", 24},
-		// Invite 2 (Emma): 3 RSVPs
-		{2, true, false, true, "555-0123", "Gluten-free", "See you then!", 48},
-		{2, false, true, false, "", "", "Can't wait for the evening!", 72},
-		{2, true, true, true, "555-0456", "No shellfish", "", 120},
-		// Invite 3 (James): 2 RSVPs
-		{3, true, false, false, "", "Vegan", "Thanks for the invite!", 36},
-		{3, true, false, true, "555-0789", "", "Looking forward to it", 60},
-		// Invite 4 (Lisa): 1 RSVP
-		{4, true, true, false, "", "", "Excited to attend!", 96},
-	}
-
-	baseTime := time.Now().AddDate(0, 0, -7) // 7 days ago
-
-	for i, rsvp := range rsvpData {
-		rsvpID := uuid.New().String()
-		timestamp := baseTime.Add(time.Duration(rsvp.hoursOffset) * time.Hour)
-
-		_, err = db.Exec(
-			"INSERT INTO rsvps (id, invite_id, timestamp, attending_day, attending_evening, has_presentation, phone_number, diet_notes, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-			rsvpID,
-			inviteIDs[rsvp.inviteIdx],
-			timestamp.Format(time.RFC3339),
-			rsvp.attendingDay,
-			rsvp.attendingEvening,
-			rsvp.hasPresentation,
-			rsvp.phoneNumber,
-			rsvp.dietNotes,
-			rsvp.message,
-		)
-		if err != nil {
-			log.Fatal(err)
-		}
-		presentationStr := ""
-		if rsvp.hasPresentation {
-			presentationStr = " with presentation"
-		}
-		fmt.Printf("Created RSVP %d: %s attending (day: %v, evening: %v)%s\n",
-			i+1, invites[rsvp.inviteIdx].name, rsvp.attendingDay, rsvp.attendingEvening, presentationStr)
+		displayName := inv.firstName + " " + inv.lastName
+		fmt.Printf("Created invite: %s (%s)\n", displayName, id)
 	}
 
 	fmt.Println("\n✓ Test database created successfully at test-data.db")
 	fmt.Println("Summary:")
-	fmt.Println("  - 5 invites")
-	fmt.Println("  - 7 RSVPs total")
-	fmt.Println("  - Distribution: 0, 1, 3, 2, 1 RSVPs per invite")
+	fmt.Println("  - 86 total invites")
+	fmt.Println("  - 27 day guests (day + evening)")
+	fmt.Println("  - 59 evening guests (evening only)")
 }

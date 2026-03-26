@@ -20,23 +20,114 @@
 			font-family: var(--font-heading);
 		}
 		
+		/* Hero Section with Parallax */
+		.hero-section {
+			position: relative;
+			background-attachment: fixed;
+		}
+		
+		.hero-background {
+			background-attachment: fixed;
+			background-position: top;
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+		
+		.hero-background img {
+			animation: parallax-scroll linear forwards;
+			transform-origin: center;
+		}
+		
+		@supports (animation: parallax-scroll) {
+			.hero-background {
+				background-attachment: fixed;
+			}
+		}
+		
+		/* Fallback parallax using CSS transform */
+		@media (hover: hover) {
+			.hero-background {
+				will-change: transform;
+			}
+		}
+		
+		.hero-card {
+			animation: fadeInUp 0.2s ease-out forwards;
+			opacity: 0;
+		}
+		
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		
 		/* Timeline line */
 		.timeline-line {
 			position: absolute;
-			left: 1.5rem;
+			left: 0.75rem;
 			top: 0;
 			bottom: 0;
-			width: 2px;
+			width: 0.5rem;
+			background-color: rgb(30, 41, 59);
+			z-index: 0;
 		}
 		
-		/* Timeline dot */
+		/* Timeline item container */
+		.timeline-item {
+			position: relative;
+			margin-left: 4rem;
+			margin-bottom: 2rem;
+		}
+		
+		/* Timeline dot - hollow circle with border */
 		.timeline-dot {
 			position: absolute;
-			left: 1rem;
-			width: 1rem;
-			height: 1rem;
+			left: 0rem;
+			width: 1.5rem;
+			height: 1.5rem;
 			border-radius: 9999px;
 			top: 0;
+			background-color: white;
+			border-width: 8px;
+			z-index: 10;
+		}
+		
+		/* Timeline content */
+		.timeline-content {
+			/* Normal block flow */
+		}
+		
+		/* Timeline time */
+		.timeline-time {
+			font-family: monospace;
+			font-size: 0.875rem;
+			font-weight: 600;
+			color: rgb(71, 85, 105);
+			display: inline;
+			margin-right: 1rem;
+		}
+		
+		/* Timeline title */
+		.timeline-title {
+			display: inline;
+			font-size: 1.25rem;
+			font-weight: 700;
+			color: rgb(30, 41, 59);
+			margin: 0;
+		}
+		
+		/* Timeline description */
+		.timeline-description {
+			display: block;
+			margin-top: 0.25rem;
+			margin-bottom: 0;
+			color: rgb(71, 85, 105);
 		}
 		
 		/* Sticky footer */
@@ -62,6 +153,18 @@
 	{{template "contact" .}}
 	{{template "rsvp-cta" .}}
 	{{template "sticky-footer" .}}
+
+	<script>
+		// Parallax scroll effect
+		const heroBackground = document.querySelector('.hero-background');
+		if (heroBackground) {
+			window.addEventListener('scroll', () => {
+				const scrollPosition = window.scrollY;
+				// Move image up as user scrolls down (parallax effect)
+				heroBackground.style.transform = `translateY(${scrollPosition * 0.5}px)`;
+			});
+		}
+	</script>
 </body>
 
 </html>
