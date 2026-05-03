@@ -2,17 +2,18 @@ package web
 
 import (
 	"net/http"
+	"rsvp/store"
 )
 
-func NewMux() *http.ServeMux {
+func NewMux(store *store.Store) *http.ServeMux {
 	mux := http.NewServeMux()
 
 	fileHandler := http.FileServer(http.Dir("./public"))
 	mux.Handle("GET /", noCacheMiddleware(fileHandler))
 
-	mux.HandleFunc("GET /rsvp", getRsvpIndex)
-	mux.HandleFunc("GET /rsvp/{inviteId}", getRsvp)
-	mux.HandleFunc("POST /rsvp/{inviteId}", postRsvp)
+	mux.HandleFunc("GET /rsvp", getRsvpIndex(store))
+	mux.HandleFunc("GET /rsvp/{inviteId}", getRsvp(store))
+	mux.HandleFunc("POST /rsvp/{inviteId}", postRsvp(store))
 
 	return mux
 }

@@ -51,7 +51,7 @@ func main() {
 	time.Sleep(5000)
 
 	// Start web server
-	mux := web.NewMux()
+	mux := web.NewMux(s)
 
 	fmt.Println("listening on " + PORT)
 	http.ListenAndServe(PORT, mux)

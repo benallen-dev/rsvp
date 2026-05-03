@@ -214,3 +214,7 @@ func parseTimestamp(s string) (time.Time, error) {
 
 	return time.Time{}, err
 }
+
+func writeRsvp(rsvp invite.RSVP) {
+
+}
