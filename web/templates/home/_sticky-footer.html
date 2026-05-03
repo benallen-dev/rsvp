@@ -1,0 +1,22 @@
+{{define "sticky-footer"}}<!-- Sticky RSVP Footer (Desktop only) -->
+<div class="sticky-rsvp-footer hidden lg:flex items-center justify-between">
+	<p class="text-slate-700 font-semibold">Ready to RSVP?</p>
+	<div class="flex gap-4">
+		<a 
+			href="/respond"
+			class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition"
+		>
+			RSVP Now
+		</a>
+		<button 
+			onclick="document.querySelector('.sticky-rsvp-footer').style.display = 'none'"
+			class="text-slate-500 hover:text-slate-700"
+		>
+			✕
+		</button>
+	</div>
+</div>
+
+<!-- Bottom padding for sticky footer -->
+<div class="h-20 lg:h-24"></div>
+{{end}}

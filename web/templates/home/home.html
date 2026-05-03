@@ -1,0 +1,27 @@
+{{define "home"}}
+{{block "title" .}}HOME PAGE{{end}}
+
+{{block "content" .}}
+
+	{{template "hero" .}}
+	{{template "timeline" .}}
+	{{template "directions" .}}
+	{{template "dresscode" .}}
+	{{template "contact" .}}
+	{{template "rsvp-cta" .}}
+	{{template "sticky-footer" .}}
+
+	<script>
+		// Parallax scroll effect
+		const heroBackground = document.querySelector('.hero-background');
+		if (heroBackground) {
+			window.addEventListener('scroll', () => {
+				const scrollPosition = window.scrollY;
+				// Move image up as user scrolls down (parallax effect)
+				heroBackground.style.transform = `translateY(${scrollPosition * 0.5}px)`;
+			});
+		}
+	</script>
+{{end}}
+
+{{end}}

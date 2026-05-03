@@ -33,15 +33,15 @@ func main() {
 
 	s.LogJournalMode()
 
-	data, err := s.ReadAllInvitesWithRSVPs()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// data, err := s.ReadAllInvitesWithRSVPs()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	for _, invite := range data {
+	// for _, invite := range data {
 
-		fmt.Println(invite)
-	}
+	// 	fmt.Println(invite)
+	// }
 
 	// Experiment chan listening
 	myChan := make(chan string)
