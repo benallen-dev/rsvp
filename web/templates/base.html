@@ -14,6 +14,7 @@
 
 	<script src="https://unpkg.com/htmx.org@2.0.4"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	{{block "head" .}}{{end}}
 
 	<style type="text/tailwindcss">
 		@theme {
@@ -28,40 +29,10 @@
 			font-family: var(--font-heading);
 		}
 		
-		/* Hero Section with Parallax */
-		.hero-section {
-			position: relative;
-			background-attachment: fixed;
-		}
-		
-		.hero-background {
-			background-attachment: fixed;
-			background-position: top;
-			background-repeat: no-repeat;
-			background-size: cover;
-		}
-		
-		.hero-background img {
-			animation: parallax-scroll linear forwards;
-			transform-origin: center;
-		}
-		
-		@supports (animation: parallax-scroll) {
-			.hero-background {
-				background-attachment: fixed;
-			}
-		}
-		
-		/* Fallback parallax using CSS transform */
-		@media (hover: hover) {
-			.hero-background {
-				will-change: transform;
-			}
-		}
-		
-		.hero-card {
-			animation: fadeInUp 0.2s ease-out forwards;
-			opacity: 0;
+		/* Top menu section following */
+		#main-nav a.active {
+			border-bottom: 2px solid red;
+			font-weight: bold;
 		}
 		
 		@keyframes fadeInUp {
@@ -74,88 +45,13 @@
 				transform: translateY(0);
 			}
 		}
-		
-		/* Timeline line */
-		.timeline-line {
-			position: absolute;
-			left: 0.75rem;
-			top: 0;
-			bottom: 0;
-			width: 0.5rem;
-			background-color: rgb(30, 41, 59);
-			z-index: 0;
-		}
-		
-		/* Timeline item container */
-		.timeline-item {
-			position: relative;
-			margin-left: 4rem;
-			margin-bottom: 2rem;
-		}
-		
-		/* Timeline dot - hollow circle with border */
-		.timeline-dot {
-			position: absolute;
-			left: 0rem;
-			width: 1.5rem;
-			height: 1.5rem;
-			border-radius: 9999px;
-			top: 0;
-			background-color: white;
-			border-width: 8px;
-			z-index: 10;
-		}
-		
-		/* Timeline content */
-		.timeline-content {
-			/* Normal block flow */
-		}
-		
-		/* Timeline time */
-		.timeline-time {
-			font-family: monospace;
-			font-size: 0.875rem;
-			font-weight: 600;
-			color: rgb(71, 85, 105);
-			display: inline;
-			margin-right: 1rem;
-		}
-		
-		/* Timeline title */
-		.timeline-title {
-			display: inline;
-			font-size: 1.25rem;
-			font-weight: 700;
-			color: rgb(30, 41, 59);
-			margin: 0;
-		}
-		
-		/* Timeline description */
-		.timeline-description {
-			display: block;
-			margin-top: 0.25rem;
-			margin-bottom: 0;
-			color: rgb(71, 85, 105);
-		}
-		
-		/* Sticky footer */
-		.sticky-rsvp-footer {
-			position: fixed;
-			bottom: 0;
-			right: 0;
-			left: 0;
-			background: white;
-			border-top: 1px solid rgb(226, 232, 240);
-			padding: 1rem;
-			box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-			z-index: 40;
-		}
 	</style>
+
 </head>
 
 <body class="bg-white min-h-screen">
 	<!-- Fixed header -->
-	<nav class="fixed top-0 left-0 right-0 bg-white shadow z-10">
+	<nav id="main-nav" class="fixed top-0 left-0 right-0 bg-white shadow z-10">
 		<div class="max-w-7xl mx-auto px-4 py-4 space-x-4">
 			<h1>Menu</h1>
 			{{block "menuitems" .}}{{end}}
@@ -163,6 +59,35 @@
 	</nav>
 	{{block "content" .}}{{end}}
 
+
+	<script>
+		/* Watch scroll events for navlink highlighting */
+		const navLinks = document.querySelectorAll('#main-nav a');
+		const sections = document.querySelectorAll('section');
+
+		window.addEventListener('scroll', () => {
+			let current = '';
+			sections.forEach(section => {
+				const rect = section.getBoundingClientRect();
+				if (rect.bottom <= (window.innerHeight * 0.9)) {  // 150px from top (nav height)
+					current = section.getAttribute('id');
+				}
+			});
+
+			navLinks.forEach(link => {
+				link.classList.remove('active');
+				const section = link.getAttribute('href').slice(1);  // remove # and /
+				if (section === current) {
+					console.log('activating', section)
+					link.classList.add('active');
+				}
+			});
+			if (current == null) {
+				navLinks[0].classList.add('active')
+			}
+
+		});
+	</script>
 </body>
 
 </html>
