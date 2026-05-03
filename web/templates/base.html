@@ -58,13 +58,13 @@
 
 <body class="bg-white min-h-screen">
 	<!-- Fixed header -->
-	<nav id="main-nav" class="fixed top-0 left-0 right-0 bg-white shadow z-10">
+	<nav id="main-nav" class="h-20 fixed top-0 left-0 right-0 bg-white shadow z-10">
 		<div class="max-w-7xl mx-auto px-4 py-4 space-x-4">
 			<h1>Menu</h1>
 			{{block "menuitems" .}}{{end}}
 		</div>
 	</nav>
-	<main>
+	<main class="mt-20">
 		{{block "content" .}}{{end}}
 	</main>
 
