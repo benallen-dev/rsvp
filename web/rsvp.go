@@ -9,7 +9,7 @@ import (
 	"github.com/charmbracelet/log"
 )
 
-func getRsvpIndex(store *store.Store) http.HandlerFunc {
+func getRsvpIndex(s *store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Info("GET /rsvp")
 
@@ -17,7 +17,7 @@ func getRsvpIndex(store *store.Store) http.HandlerFunc {
 	}
 }
 
-func getRsvp(store *store.Store) http.HandlerFunc {
+func getRsvp(s *store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		inviteId := r.PathValue("inviteId")
 		log.Info("GET /rsvp", "inviteId", inviteId)
@@ -26,7 +26,7 @@ func getRsvp(store *store.Store) http.HandlerFunc {
 	}
 }
 
-func postRsvp(store *store.Store) http.HandlerFunc {
+func postRsvp(s *store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		inviteId := r.PathValue("inviteId")
 		log.Info("POST /rsvp", "id", inviteId)

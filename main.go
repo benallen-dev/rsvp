@@ -30,6 +30,9 @@ func main() {
 		log.Fatal(err)
 	}
 	defer closedb()
+
+	s.LogJournalMode()
+
 	data, err := s.ReadAllInvitesWithRSVPs()
 	if err != nil {
 		log.Fatal(err)

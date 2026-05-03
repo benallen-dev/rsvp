@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"time"
 
+	"github.com/charmbracelet/log"
 	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
 
@@ -14,7 +15,6 @@ type Store struct {
 	db *sql.DB
 }
 
-
 // Returns (*Store, db.Close, error)
 func Init(dbFile string) (*Store, func() error, error) {
 	db, err := sql.Open("sqlite3", dbFile)
@@ -23,6 +23,12 @@ func Init(dbFile string) (*Store, func() error, error) {
 	}
 
 	s := &Store{db: db}
+
+	// Enable WAL mode
+	_, err = db.Exec("PRAGMA journal_mode=WAL")
+	if err != nil {
+		return nil, nil, err
+	}
 
 	_, err = s.db.Exec(`
 		CREATE TABLE IF NOT EXISTS invites (
@@ -193,6 +199,21 @@ func (s *Store) getRSVPsForInvite(inviteID string) ([]*invite.RSVP, error) {
 	return rsvps, rows.Err()
 }
 
+func (s *Store) writeRsvp(rsvp invite.RSVP) {
+
+}
+
+func (s *Store) LogJournalMode() {
+
+	row := s.db.QueryRow("PRAGMA journal_mode")
+	var mode string
+	err := row.Scan(&mode)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Infof("Journal mode: %s", mode)
+}
+
 // Helper functions for parsing
 
 func parseUUID(s string) (uuid.UUID, error) {
@@ -213,8 +234,4 @@ func parseTimestamp(s string) (time.Time, error) {
 	}
 
 	return time.Time{}, err
-}
-
-func writeRsvp(rsvp invite.RSVP) {
-
 }
