@@ -9,10 +9,8 @@ import (
 func NewMux(s *store.Store) *http.ServeMux {
 	mux := http.NewServeMux()
 
-	// fileHandler := http.FileServer(http.Dir("./public"))
-	// mux.Handle("GET /", noCacheMiddleware(fileHandler))
 	
-	mux.HandleFunc("GET /home", handlers.GetHome)
+	mux.HandleFunc("GET /", handlers.GetHome)
 
 	mux.HandleFunc("GET /overview", handlers.GetOverview(s))
 
@@ -20,6 +18,10 @@ func NewMux(s *store.Store) *http.ServeMux {
 	mux.HandleFunc("GET /rsvp/{inviteId}", getRsvp(s))
 	mux.HandleFunc("POST /rsvp/{inviteId}", postRsvp(s))
 
+	// Catch-all for things like favicon
+	// fileHandler := http.FileServer(http.Dir("./public"))
+	// mux.Handle("GET /", noCacheMiddleware(fileHandler))
+	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./public"))))
 	return mux
 }
 

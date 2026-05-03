@@ -29,8 +29,15 @@
 			font-family: var(--font-heading);
 		}
 		
-		/* Top menu section following */
+		/* Top menu */
+		#main-nav a {
+			font-weight: 500;
+			border-bottom: 2px solid rgba(0,0,0, 0);
+			transition: border 0.3s ease;
+		}
+			
 		#main-nav a.active {
+			font-weight: 700;
 			border-bottom: 2px solid red;
 			font-weight: bold;
 		}
@@ -57,7 +64,9 @@
 			{{block "menuitems" .}}{{end}}
 		</div>
 	</nav>
-	{{block "content" .}}{{end}}
+	<main>
+		{{block "content" .}}{{end}}
+	</main>
 
 
 	<script>
