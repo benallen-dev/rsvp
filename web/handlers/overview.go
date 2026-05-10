@@ -1,19 +1,23 @@
 package handlers
 
 import (
+	"encoding/json"
 	"html/template"
 	"net/http"
 
 	"github.com/charmbracelet/log"
 
 	"rsvp/config"
+	"rsvp/invite"
 	"rsvp/store"
 )
 
 var overviewTemplate *template.Template
 
-const USERNAME = "ben"
-const PASSWORD = "foo"
+type OverviewData struct {
+	Invites     []*invite.InviteWithRSVPs
+	Stringified string
+}
 
 func init() {
 	// Silent fail on init - templates might not exist yet during startup
@@ -42,6 +46,7 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 		}
 
 		if overviewTemplate == nil {
+			// I think we can remove this for prod? Idk.
 			var err error
 			overviewTemplate, err = template.ParseFiles(
 				"web/templates/base.html",
@@ -55,12 +60,31 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 			log.Info("Home templates reloaded (dev mode)")
 		}
 
+		data, err := s.ReadAllInvitesWithRSVPs()
+		if err != nil {
+			log.Error(err.Error())
+			http.Error(w, "Data error", http.StatusInternalServerError)
+			return
+		}
+
+		jsonBytes, err := json.Marshal(data)
+		if err != nil {
+			log.Error(err.Error())
+			http.Error(w, "Data error", http.StatusInternalServerError)
+			return
+		}
+
+		templateData := OverviewData{
+			Invites: data,
+			Stringified: string(jsonBytes),
+		}
+
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Pragma", "no-cache")
 		w.Header().Set("Expires", "0")
 
-		if err := overviewTemplate.ExecuteTemplate(w, "base", nil); err != nil {
+		if err := overviewTemplate.ExecuteTemplate(w, "base", templateData); err != nil {
 			log.Error("Template execution failed", "err", err)
 		}
 	}
