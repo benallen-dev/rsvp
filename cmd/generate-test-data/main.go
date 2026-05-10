@@ -51,6 +51,7 @@ func main() {
 	db.Exec("DELETE FROM rsvps")
 	db.Exec("DELETE FROM invites")
 
+	// TODO: Use actual structs from invite package to at least somewhat keep this in sync
 	// Create invites
 	invites := []struct {
 		name    string
@@ -60,7 +61,7 @@ func main() {
 		{"Sarah Johnson", true, true},
 		{"Michael Chen", true, true},
 		{"Emma Williams", true, true},
-		{"James Rodriguez", true, false},
+		{"James Rodriguez", false, true},
 		{"Lisa Anderson", true, true},
 	}
 

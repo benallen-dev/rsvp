@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// Changing this? Don't forget to update the store tables!
 type RSVP struct {
 	Id               uuid.UUID `json:"-"`
 	InviteId         uuid.UUID `json:"-"`

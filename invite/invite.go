@@ -2,6 +2,7 @@ package invite
 
 import "github.com/google/uuid"
 
+// Changing this? Don't forget to update the store tables!
 type Invite struct {
 	Id      uuid.UUID
 	Name    string

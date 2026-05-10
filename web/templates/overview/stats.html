@@ -1,0 +1,26 @@
+{{define "stats"}}
+
+
+<table>
+	<tr>
+		<th>No response</th>
+		<td>{{ .Stats.NoResponse }}</td>
+	</tr>
+	<tr>
+		<th>Attending Day</th>
+		<td>{{ .Stats.AttendingDay }}</td>
+	</tr>
+	<tr>
+		<th>Attending Evening</th>
+		<td>{{ .Stats.AttendingEvening }}</td>
+	</tr>
+	<tr>
+		<th>Not Attending Day</th>
+		<td>{{ .Stats.NotAttendingDay }}</td>
+	</tr>
+	<tr>
+		<th>Not Attending Evening</th>
+		<td>{{ .Stats.NotAttendingEvening }}</td>
+	</tr>
+</table>
+{{end}}

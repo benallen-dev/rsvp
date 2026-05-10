@@ -7,11 +7,19 @@
 {{end}}
 
 {{block "content" .}}
-<section id="overview">
-	<h1>Hello overview</h1>
-	<pre>
-		{{ .Stringified }}
-	</pre>
+<section id="overview" class="py-8">
+	<div class="max-w-2xl mx-auto">
+		<h1 class="text-3xl font-bold mb-6">RSVP Overzicht</h1>
+
+		{{template "stats" .}}
+
+		
+		<div class="space-y-2">
+			{{range .Invites}}
+				{{template "inviteCard" .}}
+			{{end}}
+		</div>
+	</div>
 </section>
 {{end}}
 

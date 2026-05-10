@@ -1,0 +1,128 @@
+{{define "inviteCard"}}
+{{$latestRSVP := last .RSVPs}}
+<details class="group border border-gray-300 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+	<summary class="cursor-pointer p-4 bg-gray-50 hover:bg-gray-100 transition-colors flex items-center justify-between">
+		<div class="flex-1">
+			<h2 class="text-lg font-semibold text-gray-900">{{.Invite.Name}}</h2>
+			<div class="mt-2 flex items-center gap-4">
+				<!-- Day Attendance -->
+				<div class="flex items-center gap-2">
+					<span class="text-sm text-gray-600">Dag:</span>
+					{{if .Invite.Day}}
+						{{if eq $latestRSVP.AttendingDay true}}
+							<span class="text-xl text-green-600">✅</span>
+						{{else if eq $latestRSVP.AttendingDay false}}
+							<span class="text-xl text-red-600">❌</span>
+						{{else}}
+							<span class="text-xl text-blue-600">?</span>
+						{{end}}
+					{{else}}
+						<span class="text-sm text-gray-400">niet uitgenodigd</span>
+					{{end}}
+				</div>
+				
+				<!-- Evening Attendance -->
+				<div class="flex items-center gap-2">
+					<span class="text-sm text-gray-600">Avond:</span>
+					{{if .Invite.Evening}}
+						{{if eq $latestRSVP.AttendingEvening true}}
+							<span class="text-xl text-green-600">✅</span>
+						{{else if eq $latestRSVP.AttendingEvening false}}
+							<span class="text-xl text-red-600">❌</span>
+						{{else}}
+							<span class="text-xl text-blue-600">?</span>
+						{{end}}
+					{{else}}
+						<span class="text-sm text-gray-400">niet uitgenodigd</span>
+					{{end}}
+				</div>
+				
+				<!-- Presentation Badge -->
+				{{if $latestRSVP.HasPresentation}}
+					<span class="inline-block bg-yellow-200 text-yellow-900 px-2 py-1 rounded text-sm font-medium">🎤 Toespraak</span>
+				{{end}}
+			</div>
+			
+			<!-- Diet Notes -->
+			{{if $latestRSVP.DietNotes}}
+				<div class="mt-2 text-sm text-gray-700">
+					<span class="font-medium">Dieet:</span> {{$latestRSVP.DietNotes}}
+				</div>
+			{{end}}
+		</div>
+		
+		<!-- Expand Icon -->
+		<div class="ml-4 flex-shrink-0">
+			<svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+			</svg>
+		</div>
+	</summary>
+	
+	<!-- Expanded Details -->
+	<div class="px-4 py-4 bg-white border-t border-gray-200">
+		<h3 class="text-sm font-semibold text-gray-900 mb-3">Reactiegeschiedenis</h3>
+		
+		{{if .RSVPs}}
+			<div class="space-y-4">
+				{{range .RSVPs}}
+				<div class="border-l-4 border-blue-300 pl-4 py-2 bg-blue-50 rounded">
+					<div class="flex items-center justify-between mb-2">
+						<p class="text-xs text-gray-600">Ingediend: {{.Timestamp.Format "2 Jan 2006 15:04"}}</p>
+					</div>
+					
+					<div class="grid grid-cols-2 gap-3 mb-2">
+						<!-- Day Status -->
+						<div class="flex items-center gap-2">
+							<span class="text-sm text-gray-700">Dag:</span>
+							{{if eq .AttendingDay true}}
+								<span class="text-lg text-green-600">✅</span>
+								<span class="text-sm text-green-700">Aanwezig</span>
+							{{else if eq .AttendingDay false}}
+								<span class="text-lg text-red-600">❌</span>
+								<span class="text-sm text-red-700">Afwezig</span>
+							{{else}}
+								<span class="text-lg text-blue-600">?</span>
+								<span class="text-sm text-blue-700">Onbekend</span>
+							{{end}}
+						</div>
+						
+						<!-- Evening Status -->
+						<div class="flex items-center gap-2">
+							<span class="text-sm text-gray-700">Avond:</span>
+							{{if eq .AttendingEvening true}}
+								<span class="text-lg text-green-600">✅</span>
+								<span class="text-sm text-green-700">Aanwezig</span>
+							{{else if eq .AttendingEvening false}}
+								<span class="text-lg text-red-600">❌</span>
+								<span class="text-sm text-red-700">Afwezig</span>
+							{{else}}
+								<span class="text-lg text-blue-600">?</span>
+								<span class="text-sm text-blue-700">Onbekend</span>
+							{{end}}
+						</div>
+					</div>
+					
+					<!-- Presentation -->
+					{{if .HasPresentation}}
+						<p class="text-sm mb-2"><span class="bg-yellow-200 text-yellow-900 px-2 py-1 rounded">🎤 Toespraak</span></p>
+					{{end}}
+					
+					<!-- Diet Notes -->
+					{{if .DietNotes}}
+						<p class="text-sm text-gray-700"><span class="font-medium">Dieet:</span> {{.DietNotes}}</p>
+					{{end}}
+					
+					<!-- Message -->
+					{{if .Message}}
+						<p class="text-sm text-gray-700 mt-2"><span class="font-medium">Bericht:</span> {{.Message}}</p>
+					{{end}}
+				</div>
+				{{end}}
+			</div>
+		{{else}}
+			<p class="text-sm text-gray-500 italic">Nog geen reacties ontvangen</p>
+		{{end}}
+	</div>
+</details>
+{{end}}

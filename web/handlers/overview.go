@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"encoding/json"
 	"html/template"
 	"net/http"
+	"slices"
 
 	"github.com/charmbracelet/log"
 
@@ -14,17 +14,38 @@ import (
 
 var overviewTemplate *template.Template
 
+type OverviewStats struct {
+	NoResponse          int
+	AttendingDay        int
+	AttendingEvening    int
+	NotAttendingDay     int
+	NotAttendingEvening int
+}
+
 type OverviewData struct {
-	Invites     []*invite.InviteWithRSVPs
-	Stringified string
+	Invites []*invite.InviteWithRSVPs
+	Stats   OverviewStats
 }
 
 func init() {
 	// Silent fail on init - templates might not exist yet during startup
 	var err error
-	overviewTemplate, err = template.ParseFiles(
+	funcMap := template.FuncMap{
+		"last": func(slice interface{}) interface{} {
+			switch v := slice.(type) {
+			case []*invite.RSVP:
+				if len(v) > 0 {
+					return v[len(v)-1]
+				}
+			}
+			return nil
+		},
+	}
+	overviewTemplate, err = template.New("").Funcs(funcMap).ParseFiles(
 		"web/templates/base.html",
 		"web/templates/overview/overview.html",
+		"web/templates/overview/stats.html",
+		"web/templates/overview/invite-card.html",
 	)
 	if err != nil {
 		log.Debug("Home templates not yet available", "err", err)
@@ -48,9 +69,22 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 		if overviewTemplate == nil {
 			// I think we can remove this for prod? Idk.
 			var err error
-			overviewTemplate, err = template.ParseFiles(
+			funcMap := template.FuncMap{
+				"last": func(slice interface{}) interface{} {
+					switch v := slice.(type) {
+					case []*invite.RSVP:
+						if len(v) > 0 {
+							return v[len(v)-1]
+						}
+					}
+					return nil
+				},
+			}
+			overviewTemplate, err = template.New("").Funcs(funcMap).ParseFiles(
 				"web/templates/base.html",
 				"web/templates/overview/overview.html",
+				"web/templates/overview/stats.html",
+				"web/templates/overview/invite-card.html",
 			)
 			if err != nil {
 				log.Warn("Template reload failed", "err", err)
@@ -67,16 +101,49 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 			return
 		}
 
-		jsonBytes, err := json.Marshal(data)
-		if err != nil {
-			log.Error(err.Error())
-			http.Error(w, "Data error", http.StatusInternalServerError)
-			return
+		// Sort invites alphabetically by name
+		slices.SortFunc(data, func(a, b *invite.InviteWithRSVPs) int {
+			if a.Invite.Name < b.Invite.Name {
+				return -1
+			}
+			if a.Invite.Name > b.Invite.Name {
+				return 1
+			}
+			return 0
+		})
+
+		stats := OverviewStats{}
+		// Cycle through data and collect le stats
+		for _, invitation := range data {
+			if len(invitation.RSVPs) < 1 {
+				stats.NoResponse++
+				continue
+			}
+
+			// Get latest RSVP
+			latest := slices.MaxFunc(invitation.RSVPs, func(a, b *invite.RSVP) int {
+				return a.Timestamp.Compare(b.Timestamp)
+			})
+
+			if invitation.Invite.Day {
+				if latest.AttendingDay {
+					stats.AttendingDay++
+				} else {
+					stats.NotAttendingDay++
+				}
+			}
+
+			if latest.AttendingEvening {
+				stats.AttendingEvening++
+			} else {
+				stats.NotAttendingEvening++
+			}
+
 		}
 
 		templateData := OverviewData{
 			Invites: data,
-			Stringified: string(jsonBytes),
+			Stats:   stats,
 		}
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
