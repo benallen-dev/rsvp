@@ -28,10 +28,12 @@
 						<th class="px-4 py-3 text-left font-semibold text-gray-900">Not Attending</th>
 						<td class="px-4 py-3 text-right text-red-600 font-semibold">{{ .Stats.NotAttendingDay }}</td>
 					</tr>
+					{{if gt .Stats.NoResponseDay 0}}
 					<tr class="hover:bg-gray-50 transition-colors">
 						<th class="px-4 py-3 text-left font-semibold text-gray-900">No Response</th>
 						<td class="px-4 py-3 text-right text-blue-600 font-semibold">{{ .Stats.NoResponseDay }}</td>
 					</tr>
+					{{end}}
 				</tbody>
 			</table>
 		</div>
@@ -54,10 +56,12 @@
 						<th class="px-4 py-3 text-left font-semibold text-gray-900">Not Attending</th>
 						<td class="px-4 py-3 text-right text-red-600 font-semibold">{{ .Stats.NotAttendingEvening }}</td>
 					</tr>
+					{{if gt .Stats.NoResponseEvening 0}}
 					<tr class="hover:bg-gray-50 transition-colors">
 						<th class="px-4 py-3 text-left font-semibold text-gray-900">No Response</th>
 						<td class="px-4 py-3 text-right text-blue-600 font-semibold">{{ .Stats.NoResponseEvening }}</td>
 					</tr>
+					{{end}}
 				</tbody>
 			</table>
 		</div>
