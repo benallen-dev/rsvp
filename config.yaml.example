@@ -1,0 +1,11 @@
+log_level: "info"
+auth_enabled: false
+users:
+  admin:
+    pretty_name: Admin
+    username: admin
+    password: admin
+  superadmin:
+    pretty_name: Super Admin
+    username: superadmin
+    password: superadmin

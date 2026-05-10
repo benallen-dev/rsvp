@@ -3,9 +3,11 @@ package handlers
 import (
 	"html/template"
 	"net/http"
-	"rsvp/store"
 
 	"github.com/charmbracelet/log"
+
+	"rsvp/config"
+	"rsvp/store"
 )
 
 var overviewTemplate *template.Template
@@ -26,13 +28,17 @@ func init() {
 }
 
 func GetOverview(s *store.Store) http.HandlerFunc {
+	cfg := config.Current
+
 	return func(w http.ResponseWriter, r *http.Request) {
-		user, pass, ok := r.BasicAuth()
-		if !ok || user != USERNAME || pass != PASSWORD {
-			w.Header().Set("WWW-Authenticate", `Basic realm="restricted"`)
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Unauthorized"))
-			return
+		if config.Current.AuthEnabled == true {
+			user, pass, ok := r.BasicAuth()
+			if !ok || user != cfg.Users.Admin.Username || pass != cfg.Users.Admin.Password {
+				w.Header().Set("WWW-Authenticate", `Basic realm="restricted"`)
+				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte("Unauthorized"))
+				return
+			}
 		}
 
 		if overviewTemplate == nil {
