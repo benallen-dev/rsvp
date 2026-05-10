@@ -15,8 +15,8 @@ import (
 var overviewTemplate *template.Template
 
 type OverviewStats struct {
-	NoResponseDay          int
-	NoResponseEvening          int
+	NoResponseDay       int
+	NoResponseEvening   int
 	AttendingDay        int
 	AttendingEvening    int
 	NotAttendingDay     int
@@ -108,37 +108,40 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 		stats := OverviewStats{}
 		// Cycle through data and collect le stats
 		for _, invitation := range data {
-			if len(invitation.RSVPs) < 1 {
-				if invitation.Invite.Day {
-					stats.NoResponseDay++
-				}
-				stats.NoResponseEvening++
-				continue
+		
+			// Get latest RSVP
+			// Do as I say, not as I do, ok? Using this nil check is GROSS and
+			// not idiomatic Go but it avoids doing the sort twice.
+			var latest *invite.RSVP = nil
+			if len(invitation.RSVPs) > 0 {
+				latest = slices.MaxFunc(invitation.RSVPs, func(a, b *invite.RSVP) int {
+					return a.Timestamp.Compare(b.Timestamp)
+				})
 			}
 
-			// Get latest RSVP
-			latest := slices.MaxFunc(invitation.RSVPs, func(a, b *invite.RSVP) int {
-				return a.Timestamp.Compare(b.Timestamp)
-			})
-
+			// Handle day
 			if invitation.Invite.Day {
 				stats.InvitedDay++
 
-				if latest.AttendingDay {
+				if latest == nil {
+					stats.NoResponseDay++
+				} else if latest.AttendingDay {
 					stats.AttendingDay++
 				} else {
 					stats.NotAttendingDay++
 				}
 			}
 
+			// All invites are for the evening by default
 			stats.InvitedEvening++
 
-			if latest.AttendingEvening {
+			if latest == nil {
+				stats.NoResponseEvening++
+			} else if latest.AttendingEvening {
 				stats.AttendingEvening++
 			} else {
 				stats.NotAttendingEvening++
 			}
-
 		}
 
 		templateData := OverviewData{

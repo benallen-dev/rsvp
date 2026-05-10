@@ -63,6 +63,7 @@ func main() {
 		{"Emma Williams", true, true},
 		{"James Rodriguez", false, true},
 		{"Lisa Anderson", true, true},
+		{"Thorsten Ball", false, true},
 	}
 
 	inviteIDs := make([]string, len(invites))
@@ -98,10 +99,11 @@ func main() {
 		{2, false, true, "", "Can't wait for the evening!", 72},
 		{2, true, true, "No shellfish", "", 120},
 		// Invite 3 (James): 2 RSVPs
-		{3, true, false, "Vegan", "Thanks for the invite!", 36},
-		{3, true, false, "", "Looking forward to it", 60},
+		{3, false, true, "Vegan", "Thanks for the invite!", 36},
+		{3, false, false, "", "Actually I can't make it sorry", 60},
 		// Invite 4 (Lisa): 1 RSVP
-		{4, true, true, "", "Excited to attend!", 96},
+		{4, false, true, "", "I gotta work but I'll come drink the bar dry afterwards!", 96},
+		// Invite 5 (Thorsten evening only): 0 RSVPs
 	}
 
 	baseTime := time.Now().AddDate(0, 0, -7) // 7 days ago
