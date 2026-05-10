@@ -15,11 +15,14 @@ import (
 var overviewTemplate *template.Template
 
 type OverviewStats struct {
-	NoResponse          int
+	NoResponseDay          int
+	NoResponseEvening          int
 	AttendingDay        int
 	AttendingEvening    int
 	NotAttendingDay     int
 	NotAttendingEvening int
+	InvitedDay          int
+	InvitedEvening      int
 }
 
 type OverviewData struct {
@@ -27,20 +30,21 @@ type OverviewData struct {
 	Stats   OverviewStats
 }
 
+var funcMap template.FuncMap = template.FuncMap{
+	"last": func(slice any) any {
+		switch v := slice.(type) {
+		case []*invite.RSVP:
+			if len(v) > 0 {
+				return v[len(v)-1]
+			}
+		}
+		return nil
+	},
+}
+
 func init() {
 	// Silent fail on init - templates might not exist yet during startup
 	var err error
-	funcMap := template.FuncMap{
-		"last": func(slice interface{}) interface{} {
-			switch v := slice.(type) {
-			case []*invite.RSVP:
-				if len(v) > 0 {
-					return v[len(v)-1]
-				}
-			}
-			return nil
-		},
-	}
 	overviewTemplate, err = template.New("").Funcs(funcMap).ParseFiles(
 		"web/templates/base.html",
 		"web/templates/overview/overview.html",
@@ -69,17 +73,6 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 		if overviewTemplate == nil {
 			// I think we can remove this for prod? Idk.
 			var err error
-			funcMap := template.FuncMap{
-				"last": func(slice interface{}) interface{} {
-					switch v := slice.(type) {
-					case []*invite.RSVP:
-						if len(v) > 0 {
-							return v[len(v)-1]
-						}
-					}
-					return nil
-				},
-			}
 			overviewTemplate, err = template.New("").Funcs(funcMap).ParseFiles(
 				"web/templates/base.html",
 				"web/templates/overview/overview.html",
@@ -116,7 +109,10 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 		// Cycle through data and collect le stats
 		for _, invitation := range data {
 			if len(invitation.RSVPs) < 1 {
-				stats.NoResponse++
+				if invitation.Invite.Day {
+					stats.NoResponseDay++
+				}
+				stats.NoResponseEvening++
 				continue
 			}
 
@@ -126,12 +122,16 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 			})
 
 			if invitation.Invite.Day {
+				stats.InvitedDay++
+
 				if latest.AttendingDay {
 					stats.AttendingDay++
 				} else {
 					stats.NotAttendingDay++
 				}
 			}
+
+			stats.InvitedEvening++
 
 			if latest.AttendingEvening {
 				stats.AttendingEvening++

@@ -1,26 +1,66 @@
 {{define "stats"}}
+<div class="mb-8 space-y-4">
+	<!-- No Response Card -->
+	<div class="border border-blue-300 rounded-lg shadow-sm overflow-hidden bg-blue-50">
+		<div class="px-4 py-4">
+			<p class="text-sm font-semibold text-gray-600 mb-2">No response</p>
+			<p class="text-4xl font-bold text-blue-600">{{ .Stats.NoResponseEvening }}</p>
+		</div>
+	</div>
 
+	<!-- Day and Evening Grid -->
+	<div class="grid grid-cols-2 gap-4">
+		<!-- Day Column -->
+		<div class="border border-gray-300 rounded-lg shadow-sm overflow-hidden">
+			<table class="w-full">
+				<thead>
+					<tr class="px-4 py-3 bg-gray-50 border-b border-gray-200">
+						<th class="px-4 py-3 text-left font-semibold text-gray-900">Day</th>
+						<th class="px-4 py-3 text-right font-semibold text-gray-700">{{ .Stats.InvitedDay }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+						<th class="px-4 py-3 text-left font-semibold text-gray-900">Attending</th>
+						<td class="px-4 py-3 text-right text-green-600 font-semibold">{{ .Stats.AttendingDay }}</td>
+					</tr>
+					<tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+						<th class="px-4 py-3 text-left font-semibold text-gray-900">Not Attending</th>
+						<td class="px-4 py-3 text-right text-red-600 font-semibold">{{ .Stats.NotAttendingDay }}</td>
+					</tr>
+					<tr class="hover:bg-gray-50 transition-colors">
+						<th class="px-4 py-3 text-left font-semibold text-gray-900">No Response</th>
+						<td class="px-4 py-3 text-right text-blue-600 font-semibold">{{ .Stats.NoResponseDay }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-<table>
-	<tr>
-		<th>No response</th>
-		<td>{{ .Stats.NoResponse }}</td>
-	</tr>
-	<tr>
-		<th>Attending Day</th>
-		<td>{{ .Stats.AttendingDay }}</td>
-	</tr>
-	<tr>
-		<th>Attending Evening</th>
-		<td>{{ .Stats.AttendingEvening }}</td>
-	</tr>
-	<tr>
-		<th>Not Attending Day</th>
-		<td>{{ .Stats.NotAttendingDay }}</td>
-	</tr>
-	<tr>
-		<th>Not Attending Evening</th>
-		<td>{{ .Stats.NotAttendingEvening }}</td>
-	</tr>
-</table>
+		<!-- Evening Column -->
+		<div class="border border-gray-300 rounded-lg shadow-sm overflow-hidden">
+			<table class="w-full">
+				<thead>
+					<tr class="px-4 py-3 bg-gray-50 border-b border-gray-200">
+						<th class="px-4 py-3 text-left font-semibold text-gray-900">Evening</th>
+						<th class="px-4 py-3 text-right font-semibold text-gray-700">{{ .Stats.InvitedEvening }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+						<th class="px-4 py-3 text-left font-semibold text-gray-900">Attending</th>
+						<td class="px-4 py-3 text-right text-green-600 font-semibold">{{ .Stats.AttendingEvening }}</td>
+					</tr>
+					<tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+						<th class="px-4 py-3 text-left font-semibold text-gray-900">Not Attending</th>
+						<td class="px-4 py-3 text-right text-red-600 font-semibold">{{ .Stats.NotAttendingEvening }}</td>
+					</tr>
+					<tr class="hover:bg-gray-50 transition-colors">
+						<th class="px-4 py-3 text-left font-semibold text-gray-900">No Response</th>
+						<td class="px-4 py-3 text-right text-blue-600 font-semibold">{{ .Stats.NoResponseDay }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 {{end}}
