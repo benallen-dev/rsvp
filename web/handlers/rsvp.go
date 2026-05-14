@@ -16,6 +16,14 @@ func GetRsvp(s *store.Store) http.HandlerFunc {
 
 		log.Info("GET /rsvp", "inviteId", inviteId)
 
+		invite, err := s.ReadInvite(inviteId)
+		if err != nil {
+			http.Error(w, "Could not fetch invite for id " + inviteId, 400)
+		}
+
+		log.Infof("%v", invite)
+		
+
 		w.Write([]byte("TODO: Render RSVP template for " + inviteId))
 	}
 }

@@ -13,8 +13,9 @@
 				hx-target="#results"
 			>
 				<option value="" disabled selected>Select invite</option>
-				<option value="some-id">foo</option>
-				<option value="some-other-id">bar</option>
+				{{range .Invites}}
+			<option value={{.Id}}>{{.Name}}</option>
+				{{end}}
 			</select>
 	</div>
 

@@ -4,16 +4,11 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/charmbracelet/log"
 	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
 
 	"rsvp/invite"
 )
-
-type Store struct {
-	db *sql.DB
-}
 
 // Returns (*Store, db.Close, error)
 func Init(dbFile string) (*Store, func() error, error) {
@@ -30,6 +25,7 @@ func Init(dbFile string) (*Store, func() error, error) {
 		return nil, nil, err
 	}
 
+	// TODO: MAKE THIS MATCH INVITE
 	_, err = s.db.Exec(`
 		CREATE TABLE IF NOT EXISTS invites (
 			id TEXT PRIMARY KEY,
@@ -42,6 +38,7 @@ func Init(dbFile string) (*Store, func() error, error) {
 		return nil, nil, err
 	}
 
+	// TODO: MAKE THIS MATCH RSVP
 	_, err = s.db.Exec(`
         CREATE TABLE IF NOT EXISTS rsvps (
             id TEXT PRIMARY KEY,
@@ -61,87 +58,8 @@ func Init(dbFile string) (*Store, func() error, error) {
 	return s, db.Close, nil
 }
 
-// ReadAllInvitesWithRSVPs returns all invites with their associated RSVPs
-func (s *Store) ReadAllInvitesWithRSVPs() ([]*invite.InviteWithRSVPs, error) {
-	rows, err := s.db.Query(`SELECT id, name, day, evening FROM invites ORDER BY name ASC`)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
 
-	var result []*invite.InviteWithRSVPs
-
-	for rows.Next() {
-		var id, name string
-		var day, evening bool
-
-		if err := rows.Scan(&id, &name, &day, &evening); err != nil {
-			return nil, err
-		}
-
-		// Parse UUID
-		uuid, err := parseUUID(id)
-		if err != nil {
-			return nil, err
-		}
-
-		inv := &invite.Invite{
-			Id:      uuid,
-			Name:    name,
-			Day:     day,
-			Evening: evening,
-		}
-
-		// Get RSVPs for this invite
-		rsvps, err := s.getRSVPsForInvite(id)
-		if err != nil {
-			return nil, err
-		}
-
-		result = append(result, &invite.InviteWithRSVPs{
-			Invite: inv,
-			RSVPs:  rsvps,
-		})
-	}
-
-	return result, rows.Err()
-}
-
-// ReadInviteWithRSVPs returns a single invite with its associated RSVPs
-func (s *Store) ReadInviteWithRSVPs(id string) (*invite.InviteWithRSVPs, error) {
-	var name string
-	var day, evening bool
-
-	err := s.db.QueryRow(`SELECT name, day, evening FROM invites WHERE id = ?`, id).
-		Scan(&name, &day, &evening)
-	if err != nil {
-		return nil, err
-	}
-
-	// Parse UUID
-	uuid, err := parseUUID(id)
-	if err != nil {
-		return nil, err
-	}
-
-	inv := &invite.Invite{
-		Id:      uuid,
-		Name:    name,
-		Day:     day,
-		Evening: evening,
-	}
-
-	// Get RSVPs for this invite
-	rsvps, err := s.getRSVPsForInvite(id)
-	if err != nil {
-		return nil, err
-	}
-
-	return &invite.InviteWithRSVPs{
-		Invite: inv,
-		RSVPs:  rsvps,
-	}, nil
-}
+//  ── Helper functions used in public API ───────────────────────────────────
 
 // getRSVPsForInvite is a helper function that fetches all RSVPs for a given invite ID
 func (s *Store) getRSVPsForInvite(inviteID string) ([]*invite.RSVP, error) {
@@ -203,18 +121,8 @@ func (s *Store) writeRsvp(rsvp invite.RSVP) {
 
 }
 
-func (s *Store) LogJournalMode() {
 
-	row := s.db.QueryRow("PRAGMA journal_mode")
-	var mode string
-	err := row.Scan(&mode)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Infof("Journal mode: %s", mode)
-}
-
-// Helper functions for parsing
+//  ── Helper functions for parsing ─────────────────────────────────────────
 
 func parseUUID(s string) (uuid.UUID, error) {
 	return uuid.Parse(s)

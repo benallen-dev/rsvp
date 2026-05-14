@@ -9,7 +9,7 @@ import (
 func NewMux(s *store.Store) *http.ServeMux {
 	mux := http.NewServeMux()
 	
-	mux.HandleFunc("GET /", handlers.GetHome)
+	mux.HandleFunc("GET /", handlers.GetHome(s))
 
 	mux.HandleFunc("GET /overview", handlers.GetOverview(s)) // For BTS use
 

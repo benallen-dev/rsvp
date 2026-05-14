@@ -1,0 +1,13 @@
+{{define "rsvp-form"}}
+
+<form name="foo">
+	<input type="hidden" name="invite-id" value="{{ .InviteId }}">
+	<label>
+		Name:
+		<input type="text" name="name" required>
+	</label>
+	<button type="submit">Submit</button>
+</form>
+
+{{end}}
+
