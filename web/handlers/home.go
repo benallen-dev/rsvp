@@ -19,7 +19,7 @@ type homeTemplateData struct {
 func init() {
 	// Silent fail on init - templates might not exist yet during startup
 	var err error
-	homeTemplate, err = template.ParseFiles(
+	homeTemplate, err = template.New("home-tpl").Funcs(funcMap).ParseFiles(
 		"web/templates/base.html",
 		"web/templates/home/home.html",
 		"web/templates/home/_hero.html",
@@ -32,11 +32,9 @@ func init() {
 		"web/templates/home/_sticky-footer.html",
 	)
 	if err != nil {
-		log.Debug("Home templates not yet available", "err", err)
+		log.Warn("Home templates not yet available", "err", err)
 	}
 }
-
-
 
 func GetHome(s *store.Store) http.HandlerFunc {
 	//cfg := config.Current
@@ -45,7 +43,8 @@ func GetHome(s *store.Store) http.HandlerFunc {
 		// Reload on error to allow dev editing without restart
 		if homeTemplate == nil {
 			var err error
-			homeTemplate, err = template.ParseFiles(
+
+			homeTemplate, err = template.New("home-tpl").Funcs(funcMap).ParseFiles(
 				"web/templates/base.html",
 				"web/templates/home/home.html",
 				"web/templates/home/_hero.html",
@@ -64,6 +63,10 @@ func GetHome(s *store.Store) http.HandlerFunc {
 			}
 			log.Info("Home templates reloaded (dev mode)")
 		}
+
+		homeTemplate.Funcs(template.FuncMap{
+		  "sub": func(a, b int) int { return a - b },
+		})
 
 		// Get invites and pass them to template
 		var tplData homeTemplateData

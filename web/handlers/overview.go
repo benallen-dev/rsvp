@@ -30,29 +30,17 @@ type OverviewData struct {
 	Stats   OverviewStats
 }
 
-var funcMap template.FuncMap = template.FuncMap{
-	"last": func(slice any) any {
-		switch v := slice.(type) {
-		case []*invite.RSVP:
-			if len(v) > 0 {
-				return v[len(v)-1]
-			}
-		}
-		return nil
-	},
-}
-
 func init() {
 	// Silent fail on init - templates might not exist yet during startup
 	var err error
-	overviewTemplate, err = template.New("").Funcs(funcMap).ParseFiles(
+	overviewTemplate, err = template.New("overview-tpl").Funcs(funcMap).ParseFiles(
 		"web/templates/base.html",
 		"web/templates/overview/overview.html",
 		"web/templates/overview/stats.html",
 		"web/templates/overview/invite-card.html",
 	)
 	if err != nil {
-		log.Debug("Home templates not yet available", "err", err)
+		log.Warn("Overview templates not yet available", "err", err)
 	}
 }
 
@@ -73,7 +61,7 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 		if overviewTemplate == nil {
 			// I think we can remove this for prod? Idk.
 			var err error
-			overviewTemplate, err = template.New("").Funcs(funcMap).ParseFiles(
+			overviewTemplate, err = template.New("overview-tpl").Funcs(funcMap).ParseFiles(
 				"web/templates/base.html",
 				"web/templates/overview/overview.html",
 				"web/templates/overview/stats.html",

@@ -19,6 +19,7 @@ func main() {
 
 	logLevel, err := log.ParseLevel(config.Current.LogLevel)
 	log.SetLevel(logLevel)
+	log.Infof("Log level: %s", log.GetLevel().String())
 
 	// Start database
 	s, closedb, err := store.Init("./test-data.db")

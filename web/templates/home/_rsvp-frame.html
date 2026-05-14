@@ -6,17 +6,21 @@
 
 	<p>Vragen? Neem contact op met de ceremoniemeester.</p>
 	<div class="my-4">
-			<select
-				name="invite-id"
-				hx-get="/rsvp"
-				hx-params="*"
-				hx-target="#results"
-			>
-				<option value="" disabled selected>Select invite</option>
-				{{range .Invites}}
-			<option value={{.Id}}>{{.Name}}</option>
-				{{end}}
-			</select>
+		<select name="invite-id" hx-get="/rsvp" hx-params="*" hx-target="#results">
+			<option value="" disabled selected>Selecteer...</option>
+
+			<option disabled>Daggasten</option>
+
+			{{range $i, $invite := .Invites}}
+			{{if gt $i 0}}
+			{{if and (index $.Invites (sub $i 1)).Day (not .Day)}}
+			<option disabled>Avondgasten</option>
+			{{end}}
+			{{end}}
+			<option value={{.Id}}>{{.Name}} ({{if .Day}}day{{else}}evening{{end}})</option>
+			{{end}}
+
+		</select>
 	</div>
 
 	<div id="results"></div>

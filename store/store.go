@@ -38,7 +38,7 @@ func (s *Store) ReadInvite(id string) (*invite.Invite, error) {
 }
 
 func (s *Store) ReadAllInvites() ([]*invite.Invite, error) {
-	rows, err := s.db.Query(`SELECT id, name, day, evening FROM invites ORDER BY name ASC`)
+	rows, err := s.db.Query(`SELECT id, name, day, evening FROM invites ORDER BY day DESC, name ASC`)
 	if err != nil {
 		return nil, err
 	}
