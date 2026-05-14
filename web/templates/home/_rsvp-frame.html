@@ -8,7 +8,7 @@
 	<div class="my-4">
 		<select name="invite-id" hx-get="/rsvp" hx-params="*" hx-target="#results">
 			<option value="" disabled selected>Selecteer...</option>
-
+			<hr>
 			<option disabled>Daggasten</option>
 
 			{{range $i, $invite := .Invites}}
@@ -17,7 +17,7 @@
 			<option disabled>Avondgasten</option>
 			{{end}}
 			{{end}}
-			<option value={{.Id}}>{{.Name}} ({{if .Day}}day{{else}}evening{{end}})</option>
+			<option value={{.Id}}>{{.Name}}</option>
 			{{end}}
 
 		</select>
