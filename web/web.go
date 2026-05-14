@@ -8,15 +8,13 @@ import (
 
 func NewMux(s *store.Store) *http.ServeMux {
 	mux := http.NewServeMux()
-
 	
 	mux.HandleFunc("GET /", handlers.GetHome)
 
-	mux.HandleFunc("GET /overview", handlers.GetOverview(s))
+	mux.HandleFunc("GET /overview", handlers.GetOverview(s)) // For BTS use
 
-	mux.HandleFunc("GET /rsvp", getRsvpIndex(s))
-	mux.HandleFunc("GET /rsvp/{inviteId}", getRsvp(s))
-	mux.HandleFunc("POST /rsvp/{inviteId}", postRsvp(s))
+	mux.HandleFunc("GET /rsvp", handlers.GetRsvp(s)) // Gets the form
+	mux.HandleFunc("POST /rsvp", handlers.PostRsvp(s)) // Submits the form
 
 	// Catch-all for things like favicon
 	// fileHandler := http.FileServer(http.Dir("./public"))

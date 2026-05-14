@@ -1,4 +1,4 @@
-package web
+package handlers
 
 import (
 	"encoding/json"
@@ -9,24 +9,18 @@ import (
 	"github.com/charmbracelet/log"
 )
 
-func getRsvpIndex(s *store.Store) http.HandlerFunc {
+// Returns the form for a given rsvp
+func GetRsvp(s *store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Info("GET /rsvp")
+		inviteId := r.FormValue("invite-id")
 
-		w.Write([]byte("TODO: Render RSVP template"))
-	}
-}
-
-func getRsvp(s *store.Store) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		inviteId := r.PathValue("inviteId")
 		log.Info("GET /rsvp", "inviteId", inviteId)
 
-		w.Write([]byte("TODO: Render RSVP template"))
+		w.Write([]byte("TODO: Render RSVP template for " + inviteId))
 	}
 }
 
-func postRsvp(s *store.Store) http.HandlerFunc {
+func PostRsvp(s *store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		inviteId := r.PathValue("inviteId")
 		log.Info("POST /rsvp", "id", inviteId)
