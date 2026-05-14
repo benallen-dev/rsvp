@@ -4,10 +4,9 @@ import (
 	"database/sql"
 	"time"
 
+	"github.com/charmbracelet/log"
 	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
-
-	"rsvp/invite"
 )
 
 // Returns (*Store, db.Close, error)
@@ -24,9 +23,9 @@ func Init(dbFile string) (*Store, func() error, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-
+	
 	// TODO: MAKE THIS MATCH INVITE
-	_, err = s.db.Exec(`
+	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS invites (
 			id TEXT PRIMARY KEY,
 			name TEXT NOT NULL,
@@ -35,7 +34,7 @@ func Init(dbFile string) (*Store, func() error, error) {
 		)
 	`)
 	if err != nil {
-		return nil, nil, err
+		return s, db.Close, err
 	}
 
 	// TODO: MAKE THIS MATCH RSVP
@@ -51,79 +50,35 @@ func Init(dbFile string) (*Store, func() error, error) {
             FOREIGN KEY (invite_id) REFERENCES invites(id)
         )
     `)
-	if err != nil {
-		return nil, nil, err
-	}
 
-	return s, db.Close, nil
+	return s, db.Close, err
 }
 
-
-//  ── Helper functions used in public API ───────────────────────────────────
-
-// getRSVPsForInvite is a helper function that fetches all RSVPs for a given invite ID
-func (s *Store) getRSVPsForInvite(inviteID string) ([]*invite.RSVP, error) {
-	rows, err := s.db.Query(`
-		SELECT id, invite_id, timestamp, attending_day, attending_evening, diet_notes, message 
-		FROM rsvps 
-		WHERE invite_id = ?
-		ORDER BY timestamp
-	`, inviteID)
+// Let's you know which mode the DB is in
+func (s *Store) LogJournalMode() {
+	row := s.db.QueryRow("PRAGMA journal_mode")
+	var mode string
+	err := row.Scan(&mode)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
-	defer rows.Close()
-
-	var rsvps []*invite.RSVP
-
-	for rows.Next() {
-		var id, inviteIDStr, timestamp, dietNotes, message string
-		var attendingDay, attendingEvening bool
-
-		if err := rows.Scan(&id, &inviteIDStr, &timestamp, &attendingDay, &attendingEvening, &dietNotes, &message); err != nil {
-			return nil, err
-		}
-
-		// Parse UUIDs
-		rsvpID, err := parseUUID(id)
-		if err != nil {
-			return nil, err
-		}
-
-		inviteUUID, err := parseUUID(inviteIDStr)
-		if err != nil {
-			return nil, err
-		}
-
-		// Parse timestamp
-		ts, err := parseTimestamp(timestamp)
-		if err != nil {
-			return nil, err
-		}
-
-		rsvp := &invite.RSVP{
-			Id:               rsvpID,
-			InviteId:         inviteUUID,
-			Timestamp:        ts,
-			AttendingDay:     attendingDay,
-			AttendingEvening: attendingEvening,
-			DietNotes:        dietNotes,
-			Message:          message,
-		}
-
-		rsvps = append(rsvps, rsvp)
-	}
-
-	return rsvps, rows.Err()
+	log.Infof("Journal mode: %s", mode)
 }
 
-func (s *Store) writeRsvp(rsvp invite.RSVP) {
+func (s *Store) DeleteAll() error {
+	_, err := s.db.Exec("DELETE from invites")
+	if err != nil {
+		return err
+	}
 
+	_, err = s.db.Exec("DELETE from rsvps")
+	return err
 }
 
 
 //  ── Helper functions for parsing ─────────────────────────────────────────
 
+// Ignores
 func parseUUID(s string) (uuid.UUID, error) {
 	return uuid.Parse(s)
 }

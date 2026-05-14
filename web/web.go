@@ -13,7 +13,10 @@ func NewMux(s *store.Store) *http.ServeMux {
 
 	mux.HandleFunc("GET /overview", handlers.GetOverview(s)) // For BTS use
 
+	mux.HandleFunc("GET /search", handlers.GetSearch(s)) // Renders dropdown
+
 	mux.HandleFunc("GET /rsvp", handlers.GetRsvp(s)) // Gets the form
+	mux.HandleFunc("GET /rsvp/{inviteId}", handlers.GetRsvp(s)) // Gets the form
 	mux.HandleFunc("POST /rsvp", handlers.PostRsvp(s)) // Submits the form
 
 	// Catch-all for things like favicon

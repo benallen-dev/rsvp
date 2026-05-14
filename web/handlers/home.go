@@ -28,8 +28,8 @@ func init() {
 		"web/templates/home/_dresscode.html",
 		"web/templates/home/_contact.html",
 		"web/templates/home/_rsvp-cta.html",
-		"web/templates/home/_rsvp-frame.html",
 		"web/templates/home/_sticky-footer.html",
+		"web/templates/rsvp/frame.html",
 	)
 	if err != nil {
 		log.Warn("Home templates not yet available", "err", err)
@@ -53,8 +53,8 @@ func GetHome(s *store.Store) http.HandlerFunc {
 				"web/templates/home/_dresscode.html",
 				"web/templates/home/_contact.html",
 				"web/templates/home/_rsvp-cta.html",
-				"web/templates/home/_rsvp-frame.html",
 				"web/templates/home/_sticky-footer.html",
+				"web/templates/rsvp/frame.html",
 			)
 			if err != nil {
 				log.Warn("Template reload failed", "err", err)
@@ -64,13 +64,9 @@ func GetHome(s *store.Store) http.HandlerFunc {
 			log.Info("Home templates reloaded (dev mode)")
 		}
 
-		homeTemplate.Funcs(template.FuncMap{
-		  "sub": func(a, b int) int { return a - b },
-		})
-
 		// Get invites and pass them to template
 		var tplData homeTemplateData
-		invites, err := s.ReadAllInvites()
+		invites, err := s.ReadInvites()
 		if err != nil {
 			http.Error(w, "Could not get invites", 500)
 			return

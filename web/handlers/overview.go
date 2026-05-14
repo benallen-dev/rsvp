@@ -26,7 +26,7 @@ type OverviewStats struct {
 }
 
 type OverviewData struct {
-	Invites []*invite.InviteWithRSVPs
+	Invites []*invite.InviteWithRSVP
 	Stats   OverviewStats
 }
 

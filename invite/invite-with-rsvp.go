@@ -5,12 +5,12 @@ import (
 	"strings"
 )
 
-type InviteWithRSVPs struct {
+type InviteWithRSVP struct {
 	Invite *Invite
 	RSVPs  []*RSVP
 }
 
-func (i *InviteWithRSVPs) String() string {
+func (i *InviteWithRSVP) String() string {
 	var b strings.Builder
 	b.WriteString("Invite:\n")
 	fmt.Fprintf(&b, "  Id:                %s\n", i.Invite.Id)

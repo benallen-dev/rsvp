@@ -12,19 +12,19 @@ import (
 // Returns the form for a given rsvp
 func GetRsvp(s *store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		inviteId := r.FormValue("invite-id")
+		// inviteId := r.FormValue("invite-id")
+		inviteId := r.PathValue("inviteId")
 
 		log.Info("GET /rsvp", "inviteId", inviteId)
 
-		invite, err := s.ReadInvite(inviteId)
+		inv, err := s.ReadInvite(inviteId)
 		if err != nil {
-			http.Error(w, "Could not fetch invite for id " + inviteId, 400)
+			http.Error(w, "Could not fetch invite for id "+inviteId, 400)
 		}
 
-		log.Infof("%v", invite)
-		
+		log.Infof("%v", inv)
 
-		w.Write([]byte("TODO: Render RSVP template for " + inviteId))
+		w.Write([]byte("TODO: Render RSVP template for " + inv.Name + " <small>(" + inviteId + ")</small>"))
 	}
 }
 

@@ -22,23 +22,13 @@ func main() {
 	log.Infof("Log level: %s", log.GetLevel().String())
 
 	// Start database
-	s, closedb, err := store.Init("./test-data.db")
+	s, closedb, err := store.Init("./rsvp.db")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer closedb()
 
 	s.LogJournalMode()
-
-	// data, err := s.ReadAllInvitesWithRSVPs()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// for _, invite := range data {
-
-	// 	fmt.Println(invite)
-	// }
 
 	// Start web server
 	mux := web.NewMux(s)
