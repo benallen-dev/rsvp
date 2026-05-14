@@ -63,7 +63,7 @@ func Init(dbFile string) (*Store, func() error, error) {
 
 // ReadAllInvitesWithRSVPs returns all invites with their associated RSVPs
 func (s *Store) ReadAllInvitesWithRSVPs() ([]*invite.InviteWithRSVPs, error) {
-	rows, err := s.db.Query(`SELECT id, name, day, evening FROM invites`)
+	rows, err := s.db.Query(`SELECT id, name, day, evening FROM invites ORDER BY name ASC`)
 	if err != nil {
 		return nil, err
 	}

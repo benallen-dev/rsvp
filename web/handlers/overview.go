@@ -94,17 +94,6 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 			return
 		}
 
-		// Sort invites alphabetically by name
-		slices.SortFunc(data, func(a, b *invite.InviteWithRSVPs) int {
-			if a.Invite.Name < b.Invite.Name {
-				return -1
-			}
-			if a.Invite.Name > b.Invite.Name {
-				return 1
-			}
-			return 0
-		})
-
 		stats := OverviewStats{}
 		// Cycle through data and collect le stats
 		for _, invitation := range data {
