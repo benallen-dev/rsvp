@@ -21,6 +21,7 @@ func init() {
 			"web/templates/home/_dresscode.html",
 			"web/templates/home/_contact.html",
 			"web/templates/home/_rsvp-cta.html",
+			"web/templates/home/_rsvp-frame.html",
 			"web/templates/home/_sticky-footer.html",
 	)
 	if err != nil {
@@ -41,6 +42,7 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 			"web/templates/home/_dresscode.html",
 			"web/templates/home/_contact.html",
 			"web/templates/home/_rsvp-cta.html",
+			"web/templates/home/_rsvp-frame.html",
 			"web/templates/home/_sticky-footer.html",
 		)
 		if err != nil {
