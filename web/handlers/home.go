@@ -5,15 +5,12 @@ import (
 	"net/http"
 
 	"github.com/charmbracelet/log"
-
-	"rsvp/invite"
-	"rsvp/store"
 )
 
 var homeTemplate *template.Template
 
 type homeTemplateData struct {
-	Invites []*invite.Invite
+	Mode string
 }
 
 func init() {
@@ -36,10 +33,9 @@ func init() {
 	}
 }
 
-func GetHome(s *store.Store) http.HandlerFunc {
-	//cfg := config.Current
-
+func GetHome() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Info("home")
 		// Reload on error to allow dev editing without restart
 		if homeTemplate == nil {
 			var err error
@@ -55,6 +51,8 @@ func GetHome(s *store.Store) http.HandlerFunc {
 				"web/templates/home/_rsvp-cta.html",
 				"web/templates/home/_sticky-footer.html",
 				"web/templates/rsvp/frame.html",
+				"web/templates/rsvp/form-day.html",
+				"web/templates/rsvp/form-evening.html",
 			)
 			if err != nil {
 				log.Warn("Template reload failed", "err", err)
@@ -66,15 +64,10 @@ func GetHome(s *store.Store) http.HandlerFunc {
 
 		// Get invites and pass them to template
 		var tplData homeTemplateData
-		invites, err := s.ReadInvites()
-		if err != nil {
-			http.Error(w, "Could not get invites", 500)
-			return
-		}
+		routeType := getRouteType(r.URL)
+		log.Infof("Route type: %s",routeType)
+		tplData.Mode = routeType
 
-		tplData.Invites = invites
-
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Pragma", "no-cache")
 		w.Header().Set("Expires", "0")

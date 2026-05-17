@@ -8,7 +8,14 @@
 <a href="#directions">Directions</a>
 <a href="#dresscode">Dress Code</a>
 <a href="#contact">Contact</a>
-<a href="/rsvp">RSVP</a>
+
+{{if eq .Mode "evening" }}
+<a href="/evening/rsvp">RSVP (evening)</a>
+{{else if eq .Mode "day" }}
+<a href="/day/rsvp">RSVP (day)</a>
+{{else}}
+<span>????</span>
+{{end}}
 {{end}}
 
 {{block "head" .}}
@@ -131,14 +138,15 @@
 
 {{block "content" .}}
 
-	{{template "rsvp-frame" .}}
 	{{template "hero" .}}
 	{{template "timeline" .}}
 	{{template "directions" .}}
 	{{template "dresscode" .}}
 	{{template "contact" .}}
+	{{if ne .Mode ""}}
 	{{template "rsvp-cta" .}}
 	{{template "sticky-footer" .}}
+	{{end}}
 
 	<script>
 		// Parallax scroll effect

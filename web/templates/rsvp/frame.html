@@ -5,21 +5,15 @@
 		formulier gewoon nog een keer in, en we gaan uit van de meest recente reactie.</p>
 
 	<p>Vragen? Neem contact op met de ceremoniemeester.</p>
-	<div class="my-4">
-		<div>
-		<input
-			type="text"
-			name="search-input"
-			hx-get="/search"
-			hx-trigger="click,input changed delay:100ms"
-			hx-target="#dropdown"
-			class="w-full px-3 py-2 border rounded"
-			placeholder="Je naam..."
-		>
-		<div id="dropdown" class="top-full left-0 right-0 bg-white rounded shadow-lg max-h-48 overflow-y-auto z-10"></div>		
-		</div>
-	</div>
+	<div class="w-full px-3 py-2 border rounded">
 
-	<div id="rsvp-form"></div>
+		{{if eq .Mode "evening" }}
+		{{template "form-evening" .}}
+		{{else if eq .Mode "day" }}
+		{{template "form-day" .}}
+		{{else}}
+		<div>Hi you're not getting a form lol</div>
+		{{end}}
+	</div>
 </section>
 {{end}}

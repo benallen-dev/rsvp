@@ -1,0 +1,16 @@
+{{define "form-day"}}
+
+<form name="response" hx-post="/rsvp" hx-target="#results">
+	<div>Hi this is the day form</div>
+	<input type="hidden" name="form-type" value="day"></input>
+	<label>
+		Name:
+		<input type="text" name="name" required>
+	</label>
+	<button type="submit">Submit</button>
+</form>
+
+<div id="results"></div>
+
+{{end}}
+
