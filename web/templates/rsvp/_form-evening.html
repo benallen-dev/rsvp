@@ -1,13 +1,27 @@
 {{define "form-evening"}}
 
-<form name="response">
-	<div>Hi this is the evening form</div>
-	<label>
-		Name:
-		<input type="text" name="name" required>
-	</label>
-	<button type="submit">Submit</button>
+<form name="response" hx-post="/rsvp" hx-target="#results" class="w-1/2">
+	<input type="hidden" name="form-type" value="day">
+
+	<div class="form-group mb-4">
+		<label for="name" class="block mb-2">Name</label>
+		<input type="text" id="name" name="name" required class="w-full border border-gray-300 rounded px-3 py-2">
+	</div>
+
+	<div class="form-group mb-4">
+		<label for="attending_evening" class="block mb-2">Attending</label>
+		<input type="checkbox" id="attending_evening" name="attending_evening" class="border border-gray-300 rounded">
+	</div>
+
+	<div class="form-group mb-4">
+		<label for="message" class="block mb-2">Message</label>
+		<textarea id="message" name="message" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+	</div>
+
+	<button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
 </form>
+
+<div id="results"></div>
 
 {{end}}
 

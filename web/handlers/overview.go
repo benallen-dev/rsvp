@@ -1,48 +1,14 @@
 package handlers
 
 import (
-	"html/template"
 	"net/http"
-	"slices"
 
 	"github.com/charmbracelet/log"
 
 	"rsvp/config"
-	"rsvp/invite"
+	// "rsvp/invite"
 	"rsvp/store"
 )
-
-var overviewTemplate *template.Template
-
-type OverviewStats struct {
-	NoResponseDay       int
-	NoResponseEvening   int
-	AttendingDay        int
-	AttendingEvening    int
-	NotAttendingDay     int
-	NotAttendingEvening int
-	InvitedDay          int
-	InvitedEvening      int
-}
-
-type OverviewData struct {
-	Invites []*invite.InviteWithRSVP
-	Stats   OverviewStats
-}
-
-func init() {
-	// Silent fail on init - templates might not exist yet during startup
-	var err error
-	overviewTemplate, err = template.New("overview-tpl").Funcs(funcMap).ParseFiles(
-		"web/templates/base.html",
-		"web/templates/overview/overview.html",
-		"web/templates/overview/stats.html",
-		"web/templates/overview/invite-card.html",
-	)
-	if err != nil {
-		log.Warn("Overview templates not yet available", "err", err)
-	}
-}
 
 func GetOverview(s *store.Store) http.HandlerFunc {
 	cfg := config.Current
@@ -58,81 +24,82 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 			}
 		}
 
-		if overviewTemplate == nil {
-			// I think we can remove this for prod? Idk.
-			var err error
-			overviewTemplate, err = template.New("overview-tpl").Funcs(funcMap).ParseFiles(
-				"web/templates/base.html",
-				"web/templates/overview/overview.html",
-				"web/templates/overview/stats.html",
-				"web/templates/overview/invite-card.html",
-			)
-			if err != nil {
-				log.Warn("Template reload failed", "err", err)
-				http.Error(w, "Template error", http.StatusInternalServerError)
-				return
-			}
-			log.Info("Home templates reloaded (dev mode)")
-		}
-
-		data, err := s.ReadAllInvitesWithRSVPs()
+		rsvps, err := s.ReadAllRSVPs()
 		if err != nil {
-			log.Error(err.Error())
+			log.Error("could not read rsvps", "err", err)
 			http.Error(w, "Data error", http.StatusInternalServerError)
 			return
 		}
 
-		stats := OverviewStats{}
-		// Cycle through data and collect le stats
-		for _, invitation := range data {
-		
-			// Get latest RSVP
-			// Do as I say, not as I do, ok? Using this nil check is GROSS and
-			// not idiomatic Go but it avoids doing the sort twice.
-			var latest *invite.RSVP = nil
-			if len(invitation.RSVPs) > 0 {
-				latest = slices.MaxFunc(invitation.RSVPs, func(a, b *invite.RSVP) int {
-					return a.Timestamp.Compare(b.Timestamp)
-				})
-			}
-
-			// Handle day
-			if invitation.Invite.Day {
-				stats.InvitedDay++
-
-				if latest == nil {
-					stats.NoResponseDay++
-				} else if latest.AttendingDay {
-					stats.AttendingDay++
-				} else {
-					stats.NotAttendingDay++
-				}
-			}
-
-			// All invites are for the evening by default
-			stats.InvitedEvening++
-
-			if latest == nil {
-				stats.NoResponseEvening++
-			} else if latest.AttendingEvening {
-				stats.AttendingEvening++
-			} else {
-				stats.NotAttendingEvening++
-			}
-		}
-
-		templateData := OverviewData{
-			Invites: data,
-			Stats:   stats,
-		}
-
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		w.Header().Set("Pragma", "no-cache")
-		w.Header().Set("Expires", "0")
 
-		if err := overviewTemplate.ExecuteTemplate(w, "base", templateData); err != nil {
-			log.Error("Template execution failed", "err", err)
+		html := `<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>RSVP Overview</title>
+	<style>
+		body { font-family: sans-serif; margin: 20px; }
+		table { border-collapse: collapse; width: 100%; }
+		th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+		th { background-color: #f0f0f0; font-weight: bold; }
+		tr:nth-child(even) { background-color: #f9f9f9; }
+		.true { color: green; }
+		.false { color: red; }
+	</style>
+</head>
+<body>
+	<h1>RSVP Overview</h1>
+	<p>Total RSVPs: <strong>` + string(rune(len(rsvps))) + `</strong></p>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Type</th>
+				<th>Attending Day</th>
+				<th>Attending Evening</th>
+				<th>Diet Notes</th>
+				<th>Message</th>
+				<th>Timestamp</th>
+			</tr>
+		</thead>
+		<tbody>`
+
+		for _, rsvp := range rsvps {
+			dayClass := "false"
+			if rsvp.AttendingDay {
+				dayClass = "true"
+			}
+			eveningClass := "false"
+			if rsvp.AttendingEvening {
+				eveningClass = "true"
+			}
+
+			html += `<tr>
+				<td>` + rsvp.Name + `</td>
+				<td>` + rsvp.RsvpType + `</td>
+				<td class="` + dayClass + `">` + boolStr(rsvp.AttendingDay) + `</td>
+				<td class="` + eveningClass + `">` + boolStr(rsvp.AttendingEvening) + `</td>
+				<td>` + rsvp.DietNotes + `</td>
+				<td>` + rsvp.Message + `</td>
+				<td>` + rsvp.Timestamp.Format("2006-01-02 15:04:05") + `</td>
+			</tr>`
 		}
+
+		html += `</tbody>
+	</table>
+</body>
+</html>`
+
+		w.Write([]byte(html))
 	}
+}
+
+func boolStr(b bool) string {
+	if b {
+		return "Yes"
+	}
+	return "No"
 }

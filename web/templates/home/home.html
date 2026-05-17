@@ -10,11 +10,10 @@
 <a href="#contact">Contact</a>
 
 {{if eq .Mode "evening" }}
-<a href="/evening/rsvp">RSVP (evening)</a>
+<a href="#rsvp-cta">RSVP</a>
 {{else if eq .Mode "day" }}
-<a href="/day/rsvp">RSVP (day)</a>
-{{else}}
-<span>????</span>
+<a href="#rsvp-cta">RSVP</a>
+{{else if eq .Mode "day" }}
 {{end}}
 {{end}}
 

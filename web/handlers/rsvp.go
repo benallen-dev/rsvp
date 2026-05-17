@@ -1,14 +1,15 @@
 package handlers
 
 import (
-//	"encoding/json"
 	"html/template"
 	"net/http"
+	"time"
 	
-//	"rsvp/invite"
+	"rsvp/invite"
 	"rsvp/store"
 
 	"github.com/charmbracelet/log"
+	"github.com/google/uuid"
 )
 
 var rsvpTemplate *template.Template
@@ -67,27 +68,49 @@ func PostRsvp(s *store.Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Info("POST /rsvp")
 
-		// decoder := json.NewDecoder(r.Body)
+		err := r.ParseForm()
+		if err != nil {
+			log.Error("could not parse form", "err", err)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
 
-		// b, err := invite.NewRsvp(inviteId)
-		// if err != nil {
-		// 	log.Error("could not create rsvp for inviteId" + inviteId)
-		// 	w.WriteHeader(http.StatusBadRequest)
-		// 	w.Write([]byte("could not create rsvp for inviteId " + inviteId))
-		// 	return
-		// }
+		name := r.FormValue("name")
+		rsvpType := r.FormValue("form-type")
+		attendingDay := r.FormValue("attending_day") == "on"
+		attendingEvening := r.FormValue("attending_evening") == "on"
+		dietNotes := r.FormValue("diet_notes")
+		message := r.FormValue("message")
 
-		// err = decoder.Decode(&b)
-		// if err != nil {
-		// 	log.Error("could not decode RSVP", "id", inviteId)
-		// 	w.WriteHeader(http.StatusBadRequest)
-		// 	return
-		// }
+		if name == "" {
+			log.Error("name required")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Name is required"))
+			return
+		}
 
-		log.Warn("TODO: Actually do something with the RSVP")
+		rsvp := &invite.RSVP{
+			Id:               uuid.New(),
+			Timestamp:        time.Now(),
+			RsvpType:         rsvpType,
+			Name:             name,
+			AttendingDay:     attendingDay,
+			AttendingEvening: attendingEvening,
+			DietNotes:        dietNotes,
+			Message:          message,
+		}
 
-		// log.Info(b)
+		log.Infof("Creating RSVP: %v", rsvp)
 
-		w.Write([]byte("TODO: Render received template\n"))
+		_, err = s.CreateRSVP(rsvp)
+		if err != nil {
+			log.Error("could not create rsvp", "err", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Failed to save RSVP"))
+			return
+		}
+
+		log.Info("RSVP created", "name", name, "type", rsvpType)
+		w.Write([]byte("Thanks for your RSVP!"))
 	}
 }

@@ -3,12 +3,7 @@
 {{block "title" .}}Ben & Maaike 28-08-2026{{end}}
 
 {{block "menuitems" .}}
-<a href="#">Home</a>
-<a href="#timeline">Timeline</a>
-<a href="#directions">Directions</a>
-<a href="#dresscode">Dress Code</a>
-<a href="#contact">Contact</a>
-<a href="/rsvp">RSVP</a>
+<a href="/">Home</a>
 {{end}}
 
 {{block "content" .}}
@@ -24,8 +19,6 @@
 		{{template "form-evening" .}}
 		{{else if eq .Mode "day" }}
 		{{template "form-day" .}}
-		{{else}}
-		<div>Hi you're not getting a form lol</div>
 		{{end}}
 	</div>
 </section>

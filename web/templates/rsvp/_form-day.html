@@ -1,13 +1,34 @@
 {{define "form-day"}}
 
-<form name="response" hx-post="/rsvp" hx-target="#results">
-	<div>Hi this is the day form</div>
-	<input type="hidden" name="form-type" value="day"></input>
-	<label>
-		Name:
-		<input type="text" name="name" required>
-	</label>
-	<button type="submit">Submit</button>
+<form name="response" hx-post="/rsvp" hx-target="#results" class="w-1/2">
+	<input type="hidden" name="form-type" value="day">
+
+	<div class="form-group mb-4">
+		<label for="name" class="block mb-2">Name</label>
+		<input type="text" id="name" name="name" required class="w-full border border-gray-300 rounded px-3 py-2">
+	</div>
+
+	<div class="form-group mb-4">
+		<label for="attending_day" class="block mb-2">Attending day</label>
+		<input type="checkbox" id="attending_day" name="attending_day" class="border border-gray-300 rounded">
+	</div>
+
+	<div class="form-group mb-4">
+		<label for="attending_evening" class="block mb-2">Attending evening</label>
+		<input type="checkbox" id="attending_evening" name="attending_evening" class="border border-gray-300 rounded">
+	</div>
+
+	<div class="form-group mb-4">
+		<label for="diet_notes" class="block mb-2">Diet needs</label>
+		<textarea id="diet_notes" name="diet_notes" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+	</div>
+
+	<div class="form-group mb-4">
+		<label for="message" class="block mb-2">Message</label>
+		<textarea id="message" name="message" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+	</div>
+
+	<button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
 </form>
 
 <div id="results"></div>

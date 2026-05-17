@@ -24,30 +24,30 @@ func Init(dbFile string) (*Store, func() error, error) {
 		return nil, nil, err
 	}
 	
-	// TODO: MAKE THIS MATCH INVITE
-	_, err = db.Exec(`
-		CREATE TABLE IF NOT EXISTS invites (
-			id TEXT PRIMARY KEY,
-			name TEXT NOT NULL,
-			day BOOLEAN,
-			evening BOOLEAN
-		)
-	`)
-	if err != nil {
-		return s, db.Close, err
-	}
+	// // TODO: MAKE THIS MATCH INVITE
+	// _, err = db.Exec(`
+	// 	CREATE TABLE IF NOT EXISTS invites (
+	// 		id TEXT PRIMARY KEY,
+	// 		name TEXT NOT NULL,
+	// 		day BOOLEAN,
+	// 		evening BOOLEAN
+	// 	)
+	// `)
+	// if err != nil {
+	// 	return s, db.Close, err
+	// }
 
 	// TODO: MAKE THIS MATCH RSVP
 	_, err = s.db.Exec(`
         CREATE TABLE IF NOT EXISTS rsvps (
             id TEXT PRIMARY KEY,
-            invite_id TEXT NOT NULL,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+			rsvp_type TEXT,
+			name TEXT,
             attending_day BOOLEAN,
             attending_evening BOOLEAN,
             diet_notes TEXT,
-            message TEXT,
-            FOREIGN KEY (invite_id) REFERENCES invites(id)
+            message TEXT
         )
     `)
 
