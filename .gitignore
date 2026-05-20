@@ -3,6 +3,6 @@ tmp/
 *.db
 *.db-shm
 *.db-wal
-*.sh
+curl.sh
 
 config.yaml
