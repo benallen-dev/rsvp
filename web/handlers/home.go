@@ -35,7 +35,7 @@ func init() {
 
 func GetHome() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Info("home")
+		log.Debug("GetHome")
 		// Reload on error to allow dev editing without restart
 		if homeTemplate == nil {
 			var err error
@@ -65,7 +65,7 @@ func GetHome() http.HandlerFunc {
 		// Get invites and pass them to template
 		var tplData homeTemplateData
 		routeType := getRouteType(r.URL)
-		log.Infof("Route type: %s",routeType)
+		log.Debugf("Route type: %s",routeType)
 		tplData.Mode = routeType
 
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")

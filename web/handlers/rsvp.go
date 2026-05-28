@@ -37,7 +37,7 @@ func GetRsvp() http.HandlerFunc {
 		log.Info("rsvp")
 
 		routeType := getRouteType(r.URL)
-		log.Infof("Route type: %s",routeType)
+		log.Debugf("Route type: %s",routeType)
 
 		if routeType != "day" && routeType != "evening" {
 			log.Info("redirecting")
