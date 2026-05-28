@@ -1,5 +1,7 @@
 tmp/
 
+data/
+
 *.db
 *.db-shm
 *.db-wal

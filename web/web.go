@@ -4,29 +4,37 @@ import (
 	"net/http"
 	"rsvp/store"
 	"rsvp/web/handlers"
+
+	"github.com/charmbracelet/log"
 )
 
 func NewMux(s *store.Store) *http.ServeMux {
 	mux := http.NewServeMux()
 
-	// Catch-all for things like favicon
 	fileHandler := http.FileServer(http.Dir("./public"))
-	// mux.Handle("GET /", noCacheMiddleware(fileHandler))
-	//mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./public"))))
+
 	mux.Handle("GET /static/", http.StripPrefix("/static/", fileHandler))
 
 	mux.HandleFunc("GET /overview", handlers.GetOverview(s)) // For BTS use
-	// mux.HandleFunc("GET /search", handlers.GetSearch(s)) // Renders dropdown
-	// mux.HandleFunc("GET /rsvp", handlers.GetRsvp(s)) // Gets the form
-	// mux.HandleFunc("GET /rsvp/{inviteId}", handlers.GetRsvp(s)) // Gets the form
+
 	mux.HandleFunc("POST /rsvp", handlers.PostRsvp(s)) // Submits the form
 
 	mux.HandleFunc("GET /day/rsvp", handlers.GetRsvp())
 	mux.HandleFunc("GET /evening/rsvp", handlers.GetRsvp())
 	mux.HandleFunc("GET /day", handlers.GetHome())
 	mux.HandleFunc("GET /evening", handlers.GetHome())
-	mux.Handle("GET /favicon.ico", fileHandler)
-	mux.HandleFunc("GET /", handlers.GetHome())
+
+	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		p := r.URL.Path
+
+		if p == "/" {
+			log.Debug("Got root request, serving home", "path", p)
+			handlers.GetHome()(w,r)
+		} else {
+			log.Debug("Got root request, serving file", "path", p)
+			fileHandler.ServeHTTP(w,r)
+		}
+	})
 
 	return mux
 }

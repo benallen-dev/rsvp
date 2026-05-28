@@ -22,7 +22,7 @@ func main() {
 	log.Infof("Log level: %s", log.GetLevel().String())
 
 	// Start database
-	s, closedb, err := store.Init("./rsvp.db")
+	s, closedb, err := store.Init("./data/rsvp.db")
 	if err != nil {
 		log.Fatal(err)
 	}
