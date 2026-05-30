@@ -21,6 +21,7 @@ WORKDIR /app
 # Copy binary and config from build stage
 COPY --from=build /app/rsvp .
 COPY --from=build /app/config.yaml .
+COPY --from=build /app/public ./public
 COPY --from=build /app/web/templates ./web/templates/
 
 # Expose port

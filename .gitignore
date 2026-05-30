@@ -8,3 +8,4 @@ data/
 curl.sh
 
 config.yaml
+tailwind.config.js
