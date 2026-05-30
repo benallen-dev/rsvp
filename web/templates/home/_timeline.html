@@ -1,59 +1,56 @@
 {{define "timeline"}}<!-- Timeline Section -->
-<section id="timeline" class="py-20 px-8 max-w-4xl mx-auto">
-	<div class="relative space-y-0">
-		<div class="timeline-line"></div>
+<section id="timeline" class="py-18 px-2 md:px-8 max-w-4xl mx-auto">
+	<div class="relative space-y-0 py-2">
+		<!-- <div id="time-line" class="hidden md:block absolute left-3 top-0 bottom-0 w-2 bg-tfl-blue z-0"></div> -->
+		<div id="time-line" class="hidden md:block absolute left-3 top-0 bottom-0 w-2 bg-red-600 z-0"></div>
 
-		<div class="timeline-item">
-			<div class="timeline-content">
-				<div class="timeline-time">13.00</div>
-				<h3 class="timeline-title">Trouwceremonie</h3>
-				<p class="timeline-description">Stadhuis Delft</p>
-				<p class="timeline-description">De ceremonie is publiek toegankelijk, ook avondgasten zijn van harte welkom!</p>
-			</div>
-		</div>
+			{{ template "timeline-item" (dict
+				"Time" "13.00"
+				"Location" "Stadhuis Delft"
+				"Title" "Trouwceremonie"
+				"Description" "De ceremonie is publiek toegankelijk, ook avondgasten zijn van harte welkom!"
+			)}}
 
-		{{if eq .Mode "day" }}
-		<div class="timeline-item">
-			<div class="timeline-content">
-				<div class="timeline-time">14.00</div>
-				<h3 class="timeline-title">Borrel & Bites</h3>
-				<p class="timeline-description">De Schaapskooi</p>
-				<p class="timeline-description">Daggasten zijn vanaf 14.00 welkom in de Schaapskooi om alvast van een drankje te genieten.</p>
-			</div>
-		</div>
+		{{- if eq .Mode "day" }}
 
-		<div class="timeline-item">
-			<div class="timeline-content">
-				<div class="timeline-time">15.00~15.30</div>
-				<h3 class="timeline-title">Proost & Toast</h3>
-				<p class="timeline-description">Tussen 15.00 en 15.30 komt het bruispaar aan en proosten we met elkaar. Hier is ook de ruimte voor eventuele toasts en stukjes.</p>
-			</div>
-		</div>
+			{{ template "timeline-item" (dict
+				"Time" "14.00"
+				"Location" "De Schaapskooi"
+				"Title" "Borrel & Bites"
+				"Description" "Daggasten zijn vanaf 14.00 welkom in de Schaapskooi om alvast van een drankje te genieten."
+			)}}
 
-		<div class="timeline-item">
-			<div class="timeline-content">
-				<div class="timeline-time">18.00</div>
-				<h3 class="timeline-title">Diner</h3>
-				<p class="timeline-description">Op een mooie zomerse dag mag een barbecue natuurlijk niet ontbreken.</p>
-			</div>
-		</div>
-		{{end}}
+			{{ template "timeline-item" (dict
+				"Time" "15.00 ~ 15.30"
+				"Title" "Proost & Toast"
+				"Description" "Tussen 15.00 en 15.30 komt het bruispaar aan en proosten we met elkaar. Hier is ook de ruimte voor eventuele toasts en stukjes."
+			)}}
 
-		<div class="timeline-item">
-			<div class="timeline-content">
-				<div class="timeline-time">20.30</div>
-				<h3 class="timeline-title">Avondreceptie</h3>
-				<p class="timeline-description">Avondgasten hebben hier de gelegenheid om het bruidspaar persoonlijk te feliciteren, voordat het feest begint.</p>
-			</div>
-		</div>
+			{{ template "timeline-item" (dict
+				"Time" "18.00"
+				"Title" "Diner"
+				"Description" "Op een mooie zomerse dag mag een barbecue natuurlijk niet ontbreken."
+			)}}
 
-		<div class="timeline-item">
-			<div class="timeline-content">
-				<div class="timeline-time">21.00</div>
-				<h3 class="timeline-title">Feest!</h3>
-				<p class="timeline-description">Het bruidspaar trapt op spectaculaire wijze het feest af om 21.00. Als je ons persoonlijk wil feliciteren, zorg dan dat je voor die tijd aanwezig bent!</p>
-			</div>
-		</div>
+			{{ template "timeline-item" (dict
+				"Time" "20.30"
+				"Title" "Avondreceptie"
+				"Description" "Avondgasten hebben hier de gelegenheid om het bruidspaar persoonlijk te feliciteren voordat het feest begint."
+			)}}
+		{{ else }}
+			{{ template "timeline-item" (dict
+				"Time" "20.30"
+				"Title" "Avondreceptie"
+				"Description" "Gasten hebben hier de gelegenheid om het bruidspaar persoonlijk te feliciteren voordat het feest begint."
+			)}}
+		{{end -}}
+
+		{{ template "timeline-item" (dict
+			"Time" "21.00"
+			"Title" "Feest!"
+			"Description" "Het bruidspaar trapt het feest af om 21.00. Als je ons persoonlijk wil feliciteren, zorg dan dat je voor die tijd aanwezig bent!"
+		)}}
+
 	</div>
 </section>
 {{end}}
