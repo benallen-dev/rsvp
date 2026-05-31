@@ -1,3 +1,4 @@
+
 package handlers
 
 import (
@@ -48,6 +49,7 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 		tr:nth-child(even) { background-color: #f9f9f9; }
 		.true { color: green; }
 		.false { color: red; }
+		.na { color: gray; }
 	</style>
 </head>
 <body>
@@ -70,29 +72,24 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 		<tbody>`
 
 		for _, rsvp := range rsvps {
-			ceremonyClass := "false"
-			if rsvp.AttendingCeremony {
-				ceremonyClass = "true"
-			}
-			receptionClass := "false"
-			if rsvp.AttendingReception {
-				receptionClass = "true"
-			}
-			dinnerClass := "false"
-			if rsvp.AttendingDinner {
-				dinnerClass = "true"
-			}
-			partyClass := "false"
-			if rsvp.AttendingParty {
-				partyClass = "true"
+			// these are for everyone
+			ceremonyClass := boolClass(rsvp.AttendingCeremony)
+			partyClass := boolClass(rsvp.AttendingParty)
+			receptionClass := "na"
+			dinnerClass := "na"
+
+			// only exists for day guests
+			if rsvp.Type == "day" {
+				receptionClass = boolClass(rsvp.AttendingReception)
+				dinnerClass = boolClass(rsvp.AttendingDinner)
 			}
 
 			html += `<tr>
 				<td>` + rsvp.Name + `</td>
 				<td>` + rsvp.Type + `</td>
 				<td class="` + ceremonyClass + `">` + boolStr(rsvp.AttendingCeremony) + `</td>
-				<td class="` + receptionClass + `">` + boolStr(rsvp.AttendingReception) + `</td>
-				<td class="` + dinnerClass + `">` + boolStr(rsvp.AttendingDinner) + `</td>
+				<td class="` + receptionClass + `">` + boolClStr(rsvp.AttendingReception, receptionClass) + `</td>
+				<td class="` + dinnerClass + `">` + boolClStr(rsvp.AttendingDinner, dinnerClass) + `</td>
 				<td class="` + partyClass + `">` + boolStr(rsvp.AttendingParty) + `</td>
 				<td>` + rsvp.DietNotes + `</td>
 				<td>` + rsvp.Message + `</td>
@@ -107,6 +104,23 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 
 		w.Write([]byte(html))
 	}
+}
+
+func boolClStr(b bool, class string) string {
+	if class == "na" {
+		return "-"
+	} else if b {
+		return "Yes"
+	} else {
+		return "No"
+	}
+}
+
+func boolClass(b bool) string {
+	if b {
+		return "true"
+	}
+	return "false"
 }
 
 func boolStr(b bool) string {
