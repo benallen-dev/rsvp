@@ -4,6 +4,9 @@
 module.exports = {
 	theme: {
 		extend: {
+			boxShadow: {
+				'up': '0 -10px 15px -3px rgba(0, 0, 0, 0.1)',
+			},
 			colors: {
 				'tfl-blue': 'rgb(30,41,59)',
 				'tfl-gray': 'rgb(71,85,105)',
