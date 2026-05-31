@@ -1,9 +1,15 @@
 {{define "contact"}}<!-- Contact Section -->
-<section id="contact" class="py-16 px-8 bg-slate-50">
-	<div class="max-w-2xl mx-auto">
+<section id="contact" class="py-6 md:py-12 px-8 bg-slate-50">
+	<div class="max-w-4xl mx-auto">
 
 		<div class="bg-white rounded-lg shadow-sm p-8 border border-slate-200 text-left">
-			<h2 class="text-3xl font-bold text-slate-800 mb-8">Vragen?</h2>
+			<h2 class="text-3xl font-bold text-slate-800 mb-8">
+				{{ if eq .Mode "day" }}
+				Vragen / speechen?
+				{{ else if eq .Mode "evening" }}
+				Vragen?
+				{{ end }}
+			</h2>
 			<p class="text-slate-600 mb-6">
 				{{ if eq .Mode "day" }}
 				Wil je een speech houden of een ander stukje doen? Of heb je andere vragen? Neem contact op met onze ceremoniemeester.
