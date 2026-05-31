@@ -13,6 +13,8 @@ module.exports = {
 			colors: {
 				'tfl-blue': 'rgb(30,41,59)',
 				'tfl-gray': 'rgb(71,85,105)',
+				'whatsapp-green': '#25D366',
+				'whatsapp-green-dark': '#20ba5a',
 			},
 			animation: {
 				'fade-in-up': 'fadeInUp 0.2s ease-out forwards',
