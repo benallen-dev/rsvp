@@ -16,13 +16,6 @@
 	<h1>Hi! I'm the RSVP.html</h1>
 	<p>Weet je niet meer zeker of je al een reactie hebt gestuurd, of is er iets veranderd? Geen zorgen! Vul het
 		formulier gewoon nog een keer in.</p>
-
-	{{if eq .Mode "evening" }}
-	<p>Vragen? Neem contact op met de ceremoniemeester.</p>
-	{{else if eq .Mode "day" }}
-	<p>Wil je een speech houden of een ander stukje doen? Of heb je andere vragen? Neem contact op met de
-		ceremoniemeester.</p>
-	{{end}}
 	<div class="w-full px-3 py-2 border rounded">
 		{{if eq .Mode "evening" }}
 		{{template "form-evening" .}}

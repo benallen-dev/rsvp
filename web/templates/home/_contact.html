@@ -5,13 +5,18 @@
 		<div class="bg-white rounded-lg shadow-sm p-8 border border-slate-200 text-left">
 			<h2 class="text-3xl font-bold text-slate-800 mb-8">Vragen?</h2>
 			<p class="text-slate-600 mb-6">
-				Neem contact op met onze ceremoniemeester:
+				{{ if eq .Mode "day" }}
+				Wil je een speech houden of een ander stukje doen? Of heb je andere vragen? Neem contact op met onze ceremoniemeester.
+				{{ else if eq .Mode "evening" }}
+				Neem contact op met onze ceremoniemeester.
+				{{ end }}
 			</p>
 
 			<h3 class="text-2xl font-bold text-slate-800 mb-6">Joost Kerpels</h3>
 
 			<a href="https://wa.me/31612345678">
-				<div class="mb-8 bg-[#25D366] hover:bg-[#20ba5a] text-white font-semibold py-3 px-6 rounded-lg transition max-w-md">
+				<div
+					class="mb-8 bg-[#25D366] hover:bg-[#20ba5a] text-white font-semibold py-3 px-6 rounded-lg transition max-w-md">
 					<img class="max-h-[1.5rem] inline-block" src="/static/whatsapp.svg" alt="whatsapp logo"></img>
 					Stuur een bericht op Whatsapp
 				</div>
