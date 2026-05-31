@@ -10,14 +10,17 @@
 					<strong>Ceremonie</strong><br>
 					13:00
 				</p>
-				<div class="space-y-3 text-slate-600 text-sm mb-6">
-					<p><strong>Adres:</strong> [TBD]</p>
-					<p><strong>Parkeren:</strong> [TBD]</p>
-					<p><strong>Openbaar vervoer:</strong> [TBD]</p>
-				</div>
-				<a href="#"
+				<dl class="space-y-3 text-slate-600 text-sm mb-6">
+					<dt class="font-semibold mb-0">Adres</dt>
+					<dd>Markt 87, 2611GS Delft</dd>
+					<dt class="font-semibold mb-0">Parkeren</dt>
+					<dd>Marktgarage Delft - <a class="underline" href="https://parkerendelft.com/parkeergarages/marktgarage/">klik hier voor meer info</a></dd>
+					<dt class="font-semibold mb-0">Openbaar vervoer</dt>
+					<dd>De Markt ligt op 5 minuten lopen vanaf het Station Delft</dd>
+				</dl>
+				<a href="https://maps.app.goo.gl/iGp1VBdHCUpqc9H67"
 					class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
-					Routebeschrijving op Google Maps
+					Vind locatie op Google Maps
 				</a>
 			</div>
 
@@ -25,17 +28,29 @@
 			<div class="bg-white rounded-lg shadow-sm p-8 border border-slate-200">
 				<h3 class="text-2xl font-bold text-slate-800 mb-4">De Schaapskooi</h3>
 				<p class="text-slate-600 mb-6">
+					{{ if eq .Mode "day" }}
 					<strong>Borrel, Diner & Feest</strong><br>
 					14:00 – 00:30
+					{{ else }}
+					<strong>Feest</strong><br>
+					20:30 – 00:30
+					{{ end }}
 				</p>
-				<div class="space-y-3 text-slate-600 text-sm mb-6">
-					<p><strong>Adres:</strong> [TBD]</p>
-					<p><strong>Parkeren:</strong> [TBD]</p>
-					<p><strong>Openbaar vervoer:</strong> [TBD]</p>
-				</div>
-				<a href="#"
+				<dl class="space-y-3 text-slate-600 text-sm mb-6">
+					<dt class="font-semibold mb-0">Adres</dt>
+					<dd>Korftlaan 3, 2616 LJ Delft</dd>
+					<dt class="font-semibold mb-0">Parkeren</dt>
+					<dd>Er is volop parkeergelegenheid</dd>
+					<dt class="font-semibold mb-0">Openbaar vervoer</dt>
+					<dd>Neem vanaf Delft Centraal bus 63 richting Delftse Hout. Bushalte "Kinderboerderij" ligt 250 meter vanaf de Schaapskooi</dd>
+					<a href="https://www.schaapskooi.nl/assets/pdf/routekaart-schaapskooi-web.pdf"
+						class="underline font-semibold">PDF
+						Routebeschrijving
+					</a>
+				</dl>
+				<a href="https://maps.app.goo.gl/j4eY8QzRMiByknBbA"
 					class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
-					Routebeschrijving op Google Maps
+					Vind locatie op Google Maps
 				</a>
 
 				<!-- <div class="mapouter"><div class="gmap_canvas"><iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=schaapskooi delft&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe><a href="https://embed-googlemap.com">google map embed html</a></div><style>.mapouter{position:relative;text-align:right;width:100%;height:400px;}.gmap_canvas {overflow:hidden;background:none!important;width:100%;height:400px;}.gmap_iframe {height:400px!important;}</style></div> -->
