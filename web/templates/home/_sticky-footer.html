@@ -1,10 +1,10 @@
 {{define "sticky-footer"}}<!-- Sticky RSVP Footer (Desktop only) -->
-<div class="sticky-rsvp-footer hidden lg:flex items-center justify-between">
-	<p class="text-slate-700 font-semibold">We vinden het geweldig als je er bij bent!</p>
-	<div class="flex gap-4">
+<div class="fixed bottom-0 w-full bg-white border-t-[rgb(226, 232, 240)] p-4 shadow z-40 flex items-center justify-between">
+	<p class="text-slate-700 hidden sm:inline font-semibold">We vinden het geweldig als je er bij bent!</p>
+	<div class="flex gap-4 w-full sm:w-auto">
 		<a 
 			href="{{.Mode}}/rsvp"
-			class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded-lg transition"
+			class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded-lg transition w-full text-center"
 		>RSVP Nu</a>
 	</div>
 </div>

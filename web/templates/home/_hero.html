@@ -1,19 +1,31 @@
-{{define "hero"}}<!-- Hero Section -->
-<section class="hero-section relative h-[50vh] overflow-hidden">
+{{define "hero"}}
+<script>
+	// Parallax scroll effect
+	document.addEventListener('DOMContentLoaded', function (e) {
+
+		const heroBackground = document.getElementById('hero-background');
+		if (heroBackground) {
+			window.addEventListener('scroll', () => {
+				const scrollPosition = window.scrollY;
+				// Move image up as user scrolls down (parallax effect)
+				heroBackground.style.transform = `translateY(${scrollPosition * 0.5}px)`;
+			});
+		}
+	}, true);
+</script>
+
+<section class="bg-fixed relative h-[50vh] overflow-hidden">
 	<!-- Background image with parallax effect -->
-	<div class="hero-background absolute inset-0 w-full h-full">
-		<img 
-			src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600&q=80"
-			alt="Achtergrondfoto"
-			class="w-full h-full object-cover"
-		/>
-		<!-- Dark overlay for better text readability -->
-		<div class="absolute inset-0 bg-black/30"></div>
+	<div id="hero-background"
+		class="hover:will-change-transform bg-fixed bg-top bg-no-repeat bg-cover absolute inset-0 w-full h-full">
+		<img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600&q=80" alt="Achtergrondfoto"
+			class="origin-center w-full h-full object-cover" />
+		<div class="absolute inset-0 bg-black/40"></div>
 	</div>
 
 	<!-- Content - centered card with text -->
 	<div class="relative h-full flex items-center justify-center px-8 py-16">
-		<div class="hero-card bg-white rounded-2xl shadow-2xl p-12 max-w-2xl w-full">
+		<div class="animate-fade-in-up opacity-0 bg-white rounded-2xl shadow-2xl p-12 max-w-2xl w-full">
 			<div class="text-center">
 				<h1 class="text-5xl lg:text-6xl font-bold text-slate-800 mb-4">
 					Ben & Maaike<br />

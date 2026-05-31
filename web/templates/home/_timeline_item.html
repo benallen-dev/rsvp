@@ -1,7 +1,8 @@
 {{- define "timeline-item" -}}
-<div class="ml-8 mr-8 md:ml-16 mb-8">
+<!-- <div class="ml-8 mr-8 md:ml-16 mb-8"> -->
+<div class="ml-8 mr-8 md:ml-16 py-6 md:py-2">
 	<div id="timeline-station" class="hidden md:block h-0">
-	<div class="relative top-0.5 left-[-3.75rem] w-6 h-6 rounded-full bg-white border-6 z-10"></div>
+	<div class="relative top-0.5 left-[-3.75rem] w-6 h-6 rounded-full bg-white border-6 z-2"></div>
 	</div>
 	<div class="font-[monospace] text-sm leading-4 font-semibold text-tfl-gray block sm:inline mr-4">{{ .Time }}</div>
 	<h3 class="inline text-xl font-bold text-tfl-blue m-0">{{ .Title }}</h3>

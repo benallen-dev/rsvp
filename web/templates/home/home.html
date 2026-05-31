@@ -17,61 +17,6 @@
 {{end}}
 {{end}}
 
-{{block "head" .}}
-	<style type="text/tailwindcss">
-		
-		/* Hero Section with Parallax */
-		.hero-section {
-			position: relative;
-			background-attachment: fixed;
-		}
-		
-		.hero-background {
-			background-attachment: fixed;
-			background-position: top;
-			background-repeat: no-repeat;
-			background-size: cover;
-		}
-		
-		.hero-background img {
-			animation: parallax-scroll linear forwards;
-			transform-origin: center;
-		}
-		
-		@supports (animation: parallax-scroll) {
-			.hero-background {
-				background-attachment: fixed;
-			}
-		}
-		
-		/* Fallback parallax using CSS transform */
-		@media (hover: hover) {
-			.hero-background {
-				will-change: transform;
-			}
-		}
-		
-		.hero-card {
-			animation: fadeInUp 0.2s ease-out forwards;
-			opacity: 0;
-		}
-		
-		/* Sticky footer */
-		.sticky-rsvp-footer {
-			position: fixed;
-			bottom: 0;
-			right: 0;
-			left: 0;
-			background: white;
-			border-top: 1px solid rgb(226, 232, 240);
-			padding: 1rem;
-			box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-			z-index: 40;
-		}
-</style>
-{{end}}
-
-
 {{block "content" .}}
 
 	{{template "hero" .}}
@@ -84,17 +29,6 @@
 	{{template "sticky-footer" .}}
 	{{end}}
 
-	<script>
-		// Parallax scroll effect
-		const heroBackground = document.querySelector('.hero-background');
-		if (heroBackground) {
-			window.addEventListener('scroll', () => {
-				const scrollPosition = window.scrollY;
-				// Move image up as user scrolls down (parallax effect)
-				heroBackground.style.transform = `translateY(${scrollPosition * 0.5}px)`;
-			});
-		}
-	</script>
 {{end}}
 
 {{end}}
