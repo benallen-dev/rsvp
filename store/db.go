@@ -24,19 +24,6 @@ func Init(dbFile string) (*Store, func() error, error) {
 		return nil, nil, err
 	}
 	
-	// // TODO: MAKE THIS MATCH INVITE
-	// _, err = db.Exec(`
-	// 	CREATE TABLE IF NOT EXISTS invites (
-	// 		id TEXT PRIMARY KEY,
-	// 		name TEXT NOT NULL,
-	// 		day BOOLEAN,
-	// 		evening BOOLEAN
-	// 	)
-	// `)
-	// if err != nil {
-	// 	return s, db.Close, err
-	// }
-
 	// TODO: MAKE THIS MATCH RSVP
 	_, err = s.db.Exec(`
         CREATE TABLE IF NOT EXISTS rsvps (
@@ -44,8 +31,10 @@ func Init(dbFile string) (*Store, func() error, error) {
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
 			rsvp_type TEXT,
 			name TEXT,
-            attending_day BOOLEAN,
-            attending_evening BOOLEAN,
+			attending_ceremony BOOLEAN,
+			attending_reception BOOLEAN,
+			attending_dinner BOOLEAN,
+            attending_party BOOLEAN,
             diet_notes TEXT,
             message TEXT
         )
@@ -54,7 +43,7 @@ func Init(dbFile string) (*Store, func() error, error) {
 	return s, db.Close, err
 }
 
-// Let's you know which mode the DB is in
+// Lets you know which mode the DB is in
 func (s *Store) LogJournalMode() {
 	row := s.db.QueryRow("PRAGMA journal_mode")
 	var mode string
@@ -78,7 +67,6 @@ func (s *Store) DeleteAll() error {
 
 //  ── Helper functions for parsing ─────────────────────────────────────────
 
-// Ignores
 func parseUUID(s string) (uuid.UUID, error) {
 	return uuid.Parse(s)
 }

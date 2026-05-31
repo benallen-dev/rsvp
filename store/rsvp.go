@@ -10,12 +10,12 @@ import (
 )
 
 func (s *Store) CreateRSVP(inv *invite.RSVP) (*invite.RSVP, error) {
-	log.Infof("Inserting RSVP into DB: id=%s, name=%s, type=%s", inv.Id, inv.Name, inv.RsvpType)
+	log.Infof("Inserting RSVP into DB: id=%s, name=%s, type=%s", inv.Id, inv.Name, inv.Type)
 	
 	result, err := s.db.Exec(`
-		INSERT INTO rsvps (id, rsvp_type, name, attending_day, attending_evening, diet_notes, message)
-		VALUES (?, ?, ?, ?, ?, ?, ?)
-	`, inv.Id.String(), inv.RsvpType, inv.Name, inv.AttendingDay, inv.AttendingEvening, inv.DietNotes, inv.Message)
+		INSERT INTO rsvps (id, rsvp_type, name, attending_ceremony, attending_reception, attending_dinner, attending_party, diet_notes, message)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+	`, inv.Id.String(), inv.Type, inv.Name, inv.AttendingCeremony, inv.AttendingReception, inv.AttendingDinner, inv.AttendingParty, inv.DietNotes, inv.Message)
 	
 	if err != nil {
 		log.Errorf("Failed to insert RSVP: %v", err)
@@ -46,7 +46,7 @@ func (s *Store) DestroyRSVP(id string) error {
 
 func (s *Store) ReadAllRSVPs() ([]*invite.RSVP, error) {
 	rows, err := s.db.Query(`
-		SELECT id, rsvp_type, name, timestamp, attending_day, attending_evening, diet_notes, message
+		SELECT id, rsvp_type, name, timestamp, attending_ceremony, attending_reception, attending_dinner, attending_party, diet_notes, message
 		FROM rsvps
 		ORDER BY timestamp DESC
 	`)
@@ -59,9 +59,9 @@ func (s *Store) ReadAllRSVPs() ([]*invite.RSVP, error) {
 
 	for rows.Next() {
 		var id, rsvpType, name, timestamp, dietNotes, message string
-		var attendingDay, attendingEvening bool
+		var attendingCeremony, attendingReception, attendingDinner, attendingParty bool
 
-		if err := rows.Scan(&id, &rsvpType, &name, &timestamp, &attendingDay, &attendingEvening, &dietNotes, &message); err != nil {
+		if err := rows.Scan(&id, &rsvpType, &name, &timestamp, &attendingCeremony, &attendingReception, &attendingDinner, &attendingParty, &dietNotes, &message); err != nil {
 			log.Errorf("scan error: %v", err)
 			return nil, err
 		}
@@ -81,16 +81,17 @@ func (s *Store) ReadAllRSVPs() ([]*invite.RSVP, error) {
 		}
 
 		rsvp := &invite.RSVP{
-			Id:               rsvpID,
-			Timestamp:        ts,
-			RsvpType:         rsvpType,
-			Name:             name,
-			AttendingDay:     attendingDay,
-			AttendingEvening: attendingEvening,
-			DietNotes:        dietNotes,
-			Message:          message,
+			Id:                 rsvpID,
+			Timestamp:          ts,
+			Type:           rsvpType,
+			Name:               name,
+			AttendingCeremony:  attendingCeremony,
+			AttendingReception: attendingReception,
+			AttendingDinner:    attendingDinner,
+			AttendingParty:     attendingParty,
+			DietNotes:          dietNotes,
+			Message:            message,
 		}
-
 		rsvps = append(rsvps, rsvp)
 	}
 

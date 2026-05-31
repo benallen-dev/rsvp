@@ -1,5 +1,6 @@
 {{define "form-day"}}
 
+<p>Wil je een speech houden of een ander stukje doen? Of heb je andere vragen? Neem contact op met de ceremoniemeester.</p>
 <form name="response" hx-post="/rsvp" hx-target="#results" class="w-1/2">
 	<input type="hidden" name="form-type" value="day">
 
@@ -9,15 +10,24 @@
 	</div>
 
 	<div class="form-group mb-4">
-		<label for="attending_day" class="block mb-2">Attending day</label>
-		<input type="checkbox" id="attending_day" name="attending_day" class="border border-gray-300 rounded">
+		<label for="attending_ceremony" class="block mb-2">Attending ceremony</label>
+		<input type="checkbox" id="attending_ceremony" name="attending_ceremony" class="border border-gray-300 rounded">
 	</div>
 
 	<div class="form-group mb-4">
-		<label for="attending_evening" class="block mb-2">Attending evening</label>
-		<input type="checkbox" id="attending_evening" name="attending_evening" class="border border-gray-300 rounded">
+		<label for="attending_reception" class="block mb-2">Attending reception</label>
+		<input type="checkbox" id="attending_reception" name="attending_reception" class="border border-gray-300 rounded">
 	</div>
 
+	<div class="form-group mb-4">
+		<label for="attending_dinner" class="block mb-2">Attending dinner</label>
+		<input type="checkbox" id="attending_dinner" name="attending_dinner" class="border border-gray-300 rounded">
+	</div>
+
+	<div class="form-group mb-4">
+		<label for="attending_party" class="block mb-2">Attending party</label>
+		<input type="checkbox" id="attending_party" name="attending_party" class="border border-gray-300 rounded">
+	</div>
 	<div class="form-group mb-4">
 		<label for="diet_notes" class="block mb-2">Diet needs</label>
 		<textarea id="diet_notes" name="diet_notes" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>

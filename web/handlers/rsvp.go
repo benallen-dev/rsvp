@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"net/http"
 	"time"
-	
+
 	"rsvp/invite"
 	"rsvp/store"
 
@@ -31,26 +31,22 @@ func init() {
 		log.Warn("RSVP templates not yet available", "err", err)
 	}
 }
+
 // Returns the form for a given rsvp
 func GetRsvp() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Info("rsvp")
-
 		routeType := getRouteType(r.URL)
-		log.Debugf("Route type: %s",routeType)
+		log.Debugf("[RSVP] Route type: %s", routeType)
 
 		if routeType != "day" && routeType != "evening" {
 			log.Info("redirecting")
 			http.Redirect(w, r, "/", http.StatusFound)
-			return;
+			return
 		}
 
-		log.Info("Rendering template")
-
-	
 		// Get invites and pass them to template
 		var tplData rsvpTemplateData
-		log.Infof("Route type: %s",routeType)
+		log.Infof("Route type: %s", routeType)
 		tplData.Mode = routeType
 
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -60,7 +56,6 @@ func GetRsvp() http.HandlerFunc {
 		if err := rsvpTemplate.ExecuteTemplate(w, "base", tplData); err != nil {
 			log.Error("Template execution failed", "err", err)
 		}
-		return;
 	}
 }
 
@@ -77,8 +72,10 @@ func PostRsvp(s *store.Store) http.HandlerFunc {
 
 		name := r.FormValue("name")
 		rsvpType := r.FormValue("form-type")
-		attendingDay := r.FormValue("attending_day") == "on"
-		attendingEvening := r.FormValue("attending_evening") == "on"
+		attendingCeremony := r.FormValue("attending_ceremony") == "on"
+		attendingReception := r.FormValue("attending_reception") == "on"
+		attendingDinner := r.FormValue("attending_dinner") == "on"
+		attendingParty := r.FormValue("attending_party") == "on"
 		dietNotes := r.FormValue("diet_notes")
 		message := r.FormValue("message")
 
@@ -90,14 +87,16 @@ func PostRsvp(s *store.Store) http.HandlerFunc {
 		}
 
 		rsvp := &invite.RSVP{
-			Id:               uuid.New(),
-			Timestamp:        time.Now(),
-			RsvpType:         rsvpType,
-			Name:             name,
-			AttendingDay:     attendingDay,
-			AttendingEvening: attendingEvening,
-			DietNotes:        dietNotes,
-			Message:          message,
+			Id:                 uuid.New(),
+			Timestamp:          time.Now(),
+			Type:               rsvpType,
+			Name:               name,
+			DietNotes:          dietNotes,
+			Message:            message,
+			AttendingCeremony:  attendingCeremony,
+			AttendingReception: attendingReception,
+			AttendingDinner:    attendingDinner,
+			AttendingParty:     attendingParty,
 		}
 
 		log.Infof("Creating RSVP: %v", rsvp)

@@ -9,14 +9,16 @@ import (
 
 // Changing this? Don't forget to update the store tables!
 type RSVP struct {
-	Id               uuid.UUID `json:"-"`
-	Timestamp        time.Time `json:"-"`
-	RsvpType         string    `json:"rsvpType"`
-	Name             string    `json:"name"`
-	AttendingDay     bool      `json:"attendingDay"`
-	AttendingEvening bool      `json:"attendingEvening"`
-	DietNotes        string    `json:"dietNotes"`
-	Message          string    `json:"message"`
+	Id                 uuid.UUID `json:"-"`
+	Timestamp          time.Time `json:"-"`
+	Type               string    `json:"type"`
+	Name               string    `json:"name"`
+	AttendingCeremony  bool      `json:"attendingCeremony"`
+	AttendingReception bool      `json:"attendingReception"`
+	AttendingDinner    bool      `json:"attendingDinner"`
+	AttendingParty     bool      `json:"attendingParty"`
+	DietNotes          string    `json:"dietNotes"`
+	Message            string    `json:"message"`
 }
 
 func NewRsvp() *RSVP {
@@ -25,24 +27,27 @@ func NewRsvp() *RSVP {
 		Timestamp: time.Now(),
 	}
 }
-
 func (r RSVP) String() string {
 	return fmt.Sprintf(
 		"RSVP:\n"+
-		"  ID:                  %s\n"+
-		"  Type:                %s\n"+
-		"  Name:                %s\n"+
-		"  Timestamp:           %s\n"+
-		"  Attending Day:       %t\n"+
-		"  Attending Evening:   %t\n"+
-		"  Diet Notes:          %s\n"+
-		"  Message:             %s",
+			"  ID:                  %s\n"+
+			"  Type:                %s\n"+
+			"  Name:                %s\n"+
+			"  Timestamp:           %s\n"+
+			"  Attending Ceremony:  %t\n"+
+			"  Attending Reception: %t\n"+
+			"  Attending Dinner:    %t\n"+
+			"  Attending Party:     %t\n"+
+			"  Diet Notes:          %s\n"+
+			"  Message:             %s",
 		r.Id,
-		r.RsvpType,
+		r.Type,
 		r.Name,
 		r.Timestamp.Format(time.RFC3339),
-		r.AttendingDay,
-		r.AttendingEvening,
+		r.AttendingCeremony,
+		r.AttendingReception,
+		r.AttendingDinner,
+		r.AttendingParty,
 		r.DietNotes,
 		r.Message,
 	)

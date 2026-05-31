@@ -58,8 +58,10 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 			<tr>
 				<th>Name</th>
 				<th>Type</th>
-				<th>Attending Day</th>
-				<th>Attending Evening</th>
+				<th>Attending Ceremony</th>
+				<th>Attending Reception</th>
+				<th>Attending Dinner</th>
+				<th>Attending Party</th>
 				<th>Diet Notes</th>
 				<th>Message</th>
 				<th>Timestamp</th>
@@ -68,20 +70,30 @@ func GetOverview(s *store.Store) http.HandlerFunc {
 		<tbody>`
 
 		for _, rsvp := range rsvps {
-			dayClass := "false"
-			if rsvp.AttendingDay {
-				dayClass = "true"
+			ceremonyClass := "false"
+			if rsvp.AttendingCeremony {
+				ceremonyClass = "true"
 			}
-			eveningClass := "false"
-			if rsvp.AttendingEvening {
-				eveningClass = "true"
+			receptionClass := "false"
+			if rsvp.AttendingReception {
+				receptionClass = "true"
+			}
+			dinnerClass := "false"
+			if rsvp.AttendingDinner {
+				dinnerClass = "true"
+			}
+			partyClass := "false"
+			if rsvp.AttendingParty {
+				partyClass = "true"
 			}
 
 			html += `<tr>
 				<td>` + rsvp.Name + `</td>
-				<td>` + rsvp.RsvpType + `</td>
-				<td class="` + dayClass + `">` + boolStr(rsvp.AttendingDay) + `</td>
-				<td class="` + eveningClass + `">` + boolStr(rsvp.AttendingEvening) + `</td>
+				<td>` + rsvp.Type + `</td>
+				<td class="` + ceremonyClass + `">` + boolStr(rsvp.AttendingCeremony) + `</td>
+				<td class="` + receptionClass + `">` + boolStr(rsvp.AttendingReception) + `</td>
+				<td class="` + dinnerClass + `">` + boolStr(rsvp.AttendingDinner) + `</td>
+				<td class="` + partyClass + `">` + boolStr(rsvp.AttendingParty) + `</td>
 				<td>` + rsvp.DietNotes + `</td>
 				<td>` + rsvp.Message + `</td>
 				<td>` + rsvp.Timestamp.Format("2006-01-02 15:04:05") + `</td>

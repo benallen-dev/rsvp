@@ -27,7 +27,6 @@ func init() {
 		"web/templates/home/_contact.html",
 		"web/templates/home/_rsvp-cta.html",
 		"web/templates/home/_sticky-footer.html",
-		"web/templates/rsvp/frame.html",
 	)
 	if err != nil {
 		log.Warn("Home templates not yet available", "err", err)
@@ -52,9 +51,6 @@ func GetHome() http.HandlerFunc {
 				"web/templates/home/_contact.html",
 				"web/templates/home/_rsvp-cta.html",
 				"web/templates/home/_sticky-footer.html",
-				"web/templates/rsvp/frame.html",
-				"web/templates/rsvp/form-day.html",
-				"web/templates/rsvp/form-evening.html",
 			)
 			if err != nil {
 				log.Warn("Template reload failed", "err", err)
