@@ -16,7 +16,6 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-
 	<!-- todo: vendor in -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,7 +77,7 @@
 <body class="bg-white min-h-screen">
 	<!-- Fixed header -->
 	<nav id="main-nav" class="h-20 fixed top-0 left-0 right-0 bg-white shadow z-10">
-		<div class="max-w-7xl mx-auto pt-8 px-4 pb-4 space-x-4">
+		<div class="max-w-7xl mx-auto pt-8 px-4 pb-4 space-x-4 whitespace-nowrap overflow-x-scroll">
 			{{block "menuitems" .}}{{end}}
 		</div>
 	</nav>
@@ -86,34 +85,42 @@
 		{{block "content" .}}{{end}}
 	</main>
 
-
 	<script>
 		/* Watch scroll events for navlink highlighting */
 		const navLinks = document.querySelectorAll('#main-nav a');
 		const sections = document.querySelectorAll('section');
 
-		window.addEventListener('scroll', () => {
-			let current = '';
+		const observer = new IntersectionObserver((entries) => {
+			let largest = null;
+			let largestArea = 0;
+
 			sections.forEach(section => {
 				const rect = section.getBoundingClientRect();
-				if (rect.bottom <= (window.innerHeight * 0.9)) {  // 150px from top (nav height)
-					current = section.getAttribute('id');
+				const area = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0)) * rect.width;
+
+				if (area > largestArea) {
+					largestArea = area;
+					largest = section;
 				}
 			});
 
-			navLinks.forEach(link => {
-				link.classList.remove('active');
-				const section = link.getAttribute('href').slice(1);  // remove # and /
-				if (section === current) {
-					console.log('activating', section)
-					link.classList.add('active');
-				}
-			});
-			if (current == null) {
-				navLinks[0].classList.add('active')
+			// If near bottom and last section partially visible, highlight it
+			if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+				largest = sections[sections.length - 1];
 			}
 
-		});
+
+			if (largest) {
+				navLinks.forEach(link => link.classList.remove('active'));
+				const id = largest.getAttribute('id');
+				const activeLink = id === "hero" ? navLinks[0] : document.querySelector(`a[href="#${id}"]`)
+				activeLink?.classList.add('active');
+				activeLink?.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+			}
+		}, {threshold: [0, 0.25, 0.5, 0.75, 1]});
+
+
+		sections.forEach(section => observer.observe(section));
 	</script>
 </body>
 
