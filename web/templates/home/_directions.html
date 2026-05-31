@@ -4,7 +4,7 @@
 		<h2 class="text-4xl font-bold text-slate-800 mb-12 text-center">Locaties</h2>
 
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-			<div class="bg-white rounded-lg shadow-sm p-8 border border-slate-200">
+			<div class="bg-white rounded-lg shadow-sm p-8 border border-slate-200 flex flex-col items-start h-full">
 				<h3 class="text-2xl font-bold text-slate-800 mb-4">Stadhuis Delft</h3>
 				<p class="text-slate-600 mb-6">
 					<strong>Ceremonie</strong><br>
@@ -19,13 +19,13 @@
 					<dd>De Markt ligt op 5 minuten lopen vanaf het Station Delft</dd>
 				</dl>
 				<a href="https://maps.app.goo.gl/iGp1VBdHCUpqc9H67"
-					class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+					class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition mt-auto">
 					Vind locatie op Google Maps
 				</a>
 			</div>
 
 			<!-- The Schaapskooi -->
-			<div class="bg-white rounded-lg shadow-sm p-8 border border-slate-200">
+			<div class="bg-white rounded-lg shadow-sm p-8 border border-slate-200 flex flex-col items-start h-full">
 				<h3 class="text-2xl font-bold text-slate-800 mb-4">De Schaapskooi</h3>
 				<p class="text-slate-600 mb-6">
 					{{ if eq .Mode "day" }}
@@ -49,7 +49,7 @@
 					</a>
 				</dl>
 				<a href="https://maps.app.goo.gl/j4eY8QzRMiByknBbA"
-					class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+					class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition mt-auto">
 					Vind locatie op Google Maps
 				</a>
 
