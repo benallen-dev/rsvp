@@ -5,24 +5,24 @@
 
 	<div class="relative mb-4">
 		<input type="text" id="name" name="name" required 
-		       class="w-full rounded px-3 border border-gray-300 pt-6 pb-2 peer bg-white hover:border-gray-400">
-		<label for="name" class="absolute left-4 -top-3 bg-white text-lg px-2 pointer-events-none">
+		       class="w-full rounded px-3 border border-gray-300 pt-6 pb-2 peer bg-white hover:border-gray-400 sm:text-lg">
+		<label for="name" class="absolute left-4 -top-2 sm:-top-3 bg-white text-tfl-blue text-sm sm:text-base px-2 pointer-events-none">
 			Vul hier je naam in
 		</label>
 	</div>
 
 	<fieldset class="border border-gray-300 rounded p-4 mb-4 hover:border-gray-400">
-		<legend class="text-lg px-2">Geef aan waar je aanwezig bent</legend>
+		<legend class="text-sm sm:text-base px-2 text-tfl-blue">Geef aan waar je aanwezig bent</legend>
 		<div class="flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-50 rounded mb-3">
 			<input type="checkbox" id="attending_ceremony" name="attending_ceremony" class="w-6 h-6 cursor-pointer flex-shrink-0">
-			<label for="attending_ceremony" class="cursor-pointer flex-grow text-md">
+			<label for="attending_ceremony" class="cursor-pointer flex-grow text-sm sm:text-lg">
 				Ceremonie
 			</label>
 		</div>
 
 		<div class="flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-50 rounded">
 			<input type="checkbox" id="attending_party" name="attending_party" class="w-6 h-6 cursor-pointer flex-shrink-0">
-			<label for="attending_party" class="cursor-pointer flex-grow text-md">
+			<label for="attending_party" class="cursor-pointer flex-grow text-sm sm:text-lg">
 				Feest
 			</label>
 		</div>
@@ -30,8 +30,8 @@
 
 	<div class="relative my-8">
 		<textarea id="message" name="message" 
-		          class="w-full rounded px-3 py-2 border border-gray-300 pt-6 pb-2 peer bg-white hover:border-gray-400"></textarea>
-		<label for="message" class="absolute left-4 -top-3 bg-white text-lg px-2 pointer-events-none">
+		          class="w-full rounded px-3 py-2 border border-gray-300 pt-6 pb-2 peer bg-white hover:border-gray-400 sm:text-lg"></textarea>
+		<label for="name" class="absolute left-4 -top-2 sm:-top-3 bg-white text-tfl-blue text-sm sm:text-base px-2 pointer-events-none">
 			Wil je nog iets kwijt?
 		</label>
 	</div>
