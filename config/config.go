@@ -23,8 +23,9 @@ type Users struct {
 
 type Config struct {
 	LogLevel    string `yaml:"log_level"`
-	AuthEnabled bool      `yaml:"auth_enabled"`
-	Users       Users     `yaml:"users"`
+	AuthEnabled bool   `yaml:"auth_enabled"`
+	Users       Users  `yaml:"users"`
+	PhoneNumber string `yaml:"phone"`
 }
 
 var Current Config

@@ -3,14 +3,20 @@ package handlers
 import (
 	"html/template"
 	"net/http"
+	"net/url"
+	"strings"
 
 	"github.com/charmbracelet/log"
+
+	"rsvp/config"
 )
 
 var homeTemplate *template.Template
 
 type homeTemplateData struct {
-	Mode string
+	Mode        string
+	PhoneNumber string
+	WhatsappUrl string
 }
 
 func init() {
@@ -34,6 +40,12 @@ func init() {
 }
 
 func GetHome() http.HandlerFunc {
+	phone := config.Current.PhoneNumber
+	phoneFlat := strings.NewReplacer("+", "", " ", "").Replace(phone)
+
+	whatsappMessage := url.QueryEscape("Hoi Joost! Ik heb een vraag over de bruiloft van Ben en Maaike.")
+	whatsappUrl := "https://wa.me/" + phoneFlat + "?text="+whatsappMessage
+
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Debug("GetHome")
 		// Reload on error to allow dev editing without restart
@@ -63,8 +75,10 @@ func GetHome() http.HandlerFunc {
 		// Get invites and pass them to template
 		var tplData homeTemplateData
 		routeType := getRouteType(r.URL)
-		log.Debugf("Route type: %s",routeType)
+		log.Debugf("Route type: %s", routeType)
 		tplData.Mode = routeType
+		tplData.PhoneNumber = phone
+		tplData.WhatsappUrl = whatsappUrl
 
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Pragma", "no-cache")

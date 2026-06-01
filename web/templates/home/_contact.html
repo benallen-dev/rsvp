@@ -27,8 +27,8 @@
 				</div>
 				<div class="w-full flex flex-col justify-stretch gap-2">
 					<h3 class="text-2xl font-bold text-slate-800 whitespace-nowrap">Joost Kerpels</h3>
-					<p class="text-slate-500"><strong>Tel:</strong> +31 6 1234 5678</p>
-					<a href="https://wa.me/31612345678">
+					<p class="text-slate-500"><strong>Tel:</strong> {{ .PhoneNumber }}</p>
+					<a href="{{ .WhatsappUrl }}">
 						<div
 							class="mb-8 bg-whatsapp-green hover:bg-whatsapp-green-dark text-white font-semibold py-3 px-6 rounded-lg transition max-w-md">
 							<img class="max-h-[1.5rem] inline-block" src="/static/whatsapp.svg"
