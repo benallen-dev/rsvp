@@ -4,27 +4,40 @@
 
 {{block "menuitems" .}}
 {{if eq .Mode "evening" }}
-<a href="/evening">Home</a>
-{{else if eq .Mode "day" }}
-<a href="/day">Home</a>
-{{end}}
-{{end}}
-
-{{block "content" .}}
-
-<section id="rsvp-frame" class="py-20 px-8 max-w-4xl mx-auto">
-	<h1>Hi! I'm the RSVP.html</h1>
-	<p>Weet je niet meer zeker of je al een reactie hebt gestuurd, of is er iets veranderd? Geen zorgen! Vul het
-		formulier gewoon nog een keer in.</p>
-	<div class="w-full px-3 py-2 border rounded">
-		{{if eq .Mode "evening" }}
-		{{template "form-evening" .}}
-		{{else if eq .Mode "day" }}
-		{{template "form-day" .}}
+<a href="/evening">
+	{{else if eq .Mode "day" }}
+	<a href="/day">
 		{{end}}
-	</div>
-</section>
 
-{{end}}
 
-{{end}}
+		Terug naar het overzicht</a>
+	{{end}}
+
+	{{block "content" .}}
+
+	<section id="rsvp-frame" class="max-w-4xl mx-auto bg-fixed relative flex items-center justify-center">
+		<div id="just-taking-up-the-space-under-the-menu" class="min-h-20"></div>
+		<div id="background" class="fixed inset-0 w-screen h-screen -z-10 bg-top bg-no-repeat bg-cover">
+			<img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600&q=80" alt="Achtergrondfoto"
+				class="origin-center w-full h-full object-cover" />
+			<div class="absolute inset-0 bg-black/40"></div>
+		</div>
+			<div class="relative flex items-center justify-center h-full pt-20 md:pt-40 pb-20">
+				<div class="animate-fade-in-up opacity-0 bg-white md:rounded-2xl shadow-2xl p-12 max-w-2xl w-full">
+					<h1 class="text-2xl sm:text-3xl font-bold text-tfl-blue mb-2">RSVP</h1>
+					<p>Weet je niet meer zeker of je al een reactie hebt gestuurd, of is er iets veranderd? Geen
+						probleem! Vul het formulier gewoon nog een keer in.</p>
+					<div class="w-full mt-8">
+						{{if eq .Mode "evening" }}
+						{{template "form-evening" .}}
+						{{else if eq .Mode "day" }}
+						{{template "form-day" .}}
+						{{end}}
+					</div>
+				</div>
+		</div>
+	</section>
+
+	{{end}}
+
+	{{end}}

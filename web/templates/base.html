@@ -64,28 +64,28 @@
 		
 		/* Top menu */
 		#main-nav a {
-			font-weight: 500;
-			border-bottom: 2px solid rgba(0,0,0, 0);
-			transition: border 0.3s ease;
+			@apply font-medium border-b-2 border-transparent transition-colors duration-300;
 		}
 			
 		#main-nav a.active {
-			font-weight: 700;
-			border-bottom: 2px solid red;
-			font-weight: bold;
+			@apply font-bold border-b-2 border-b-red-600;
+		}
+
+		#main-nav a:hover {
+			@apply border-b border-b-red-600/60
 		}
 	</style>
 
 </head>
 
-<body class="bg-white min-h-screen">
+<body class="bg-white h-screen">
 	<!-- Fixed header -->
 	<nav id="main-nav" class="h-20 fixed top-0 left-0 right-0 bg-white shadow z-10">
 		<div class="max-w-7xl mx-auto pt-8 px-4 pb-4 space-x-4 whitespace-nowrap overflow-x-scroll">
 			{{block "menuitems" .}}{{end}}
 		</div>
 	</nav>
-	<main class="mt-20">
+	<main>
 		{{block "content" .}}{{end}}
 	</main>
 
