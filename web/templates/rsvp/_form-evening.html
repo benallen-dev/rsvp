@@ -1,26 +1,39 @@
 {{define "form-evening"}}
 
-<form name="response" hx-post="/rsvp" hx-target="#results" class="w-1/2">
+<form name="response" hx-post="/rsvp" hx-target="#results" class="w-full">
 	<input type="hidden" name="form-type" value="evening">
 
-	<div class="form-group mb-4">
-		<label for="name" class="block mb-2">Name</label>
-		<input type="text" id="name" name="name" required class="min-w-full border border-gray-300 rounded px-3 py-2">
+	<div class="relative mb-4">
+		<input type="text" id="name" name="name" required 
+		       class="w-full rounded px-3 border border-gray-300 pt-6 pb-2 peer bg-white hover:border-gray-400">
+		<label for="name" class="absolute left-4 -top-3 bg-white text-lg px-2 pointer-events-none">
+			Vul hier je naam in
+		</label>
 	</div>
 
-	<div class="form-group mb-4">
-		<label for="attending_ceremony" class="block mb-2">Attending ceremony</label>
-		<input type="checkbox" id="attending_ceremony" name="attending_ceremony" class="border border-gray-300 rounded">
-	</div>
+	<fieldset class="border border-gray-300 rounded p-4 mb-4 hover:border-gray-400">
+		<legend class="text-lg px-2">Geef aan waar je aanwezig bent</legend>
+		<div class="flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-50 rounded mb-3">
+			<input type="checkbox" id="attending_ceremony" name="attending_ceremony" class="w-6 h-6 cursor-pointer flex-shrink-0">
+			<label for="attending_ceremony" class="cursor-pointer flex-grow text-md">
+				Ceremonie
+			</label>
+		</div>
 
-	<div class="form-group mb-4">
-		<label for="attending_party" class="block mb-2">Attending party</label>
-		<input type="checkbox" id="attending_party" name="attending_party" class="border border-gray-300 rounded">
-	</div>
+		<div class="flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-50 rounded">
+			<input type="checkbox" id="attending_party" name="attending_party" class="w-6 h-6 cursor-pointer flex-shrink-0">
+			<label for="attending_party" class="cursor-pointer flex-grow text-md">
+				Feest
+			</label>
+		</div>
+	</fieldset>
 
-	<div class="form-group mb-4">
-		<label for="message" class="block mb-2">Message</label>
-		<textarea id="message" name="message" class="min-w-full border border-gray-300 rounded px-3 py-2"></textarea>
+	<div class="relative my-8">
+		<textarea id="message" name="message" 
+		          class="w-full rounded px-3 py-2 border border-gray-300 pt-6 pb-2 peer bg-white hover:border-gray-400"></textarea>
+		<label for="message" class="absolute left-4 -top-3 bg-white text-lg px-2 pointer-events-none">
+			Wil je nog iets kwijt?
+		</label>
 	</div>
 
 	<button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
