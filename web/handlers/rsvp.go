@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"html/template"
 	"net/http"
 	"time"
@@ -15,7 +18,32 @@ import (
 var rsvpTemplate *template.Template
 
 type rsvpTemplateData struct {
-	Mode string
+	Mode         string
+	HasRsvp      bool
+	ExistingRsvp *invite.RSVP
+}
+
+// returns pointer if ok, nil on ErrNoCookie, error on corruption
+func decodeCookie(r *http.Request) (*invite.RSVP, error) {
+	cookieData, err := r.Cookie("formdata")
+	if err == http.ErrNoCookie {
+		return nil, nil
+	} else if err != nil {
+		return nil, err
+	}
+
+	cookieValue, err := base64.StdEncoding.DecodeString(cookieData.Value)
+	if err != nil {
+		return nil, errors.New("Could not decode cookie")
+	}
+
+	var cookieRsvp invite.RSVP
+	err = json.Unmarshal(cookieValue, &cookieRsvp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &cookieRsvp, nil
 }
 
 func init() {
@@ -44,10 +72,23 @@ func GetRsvp() http.HandlerFunc {
 			return
 		}
 
+		cookieRsvp, err := decodeCookie(r)
+		if err != nil {
+			log.Warn(err.Error())
+			http.SetCookie(w, &http.Cookie{
+				Name:   "formdata",
+				Value:  "",
+				MaxAge: -1,
+			})
+			cookieRsvp = &invite.RSVP{}
+		}
+
 		// Get invites and pass them to template
 		var tplData rsvpTemplateData
 		log.Infof("Route type: %s", routeType)
 		tplData.Mode = routeType
+		tplData.HasRsvp = cookieRsvp.Id != uuid.Nil
+		tplData.ExistingRsvp = cookieRsvp
 
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Pragma", "no-cache")
@@ -109,7 +150,33 @@ func PostRsvp(s *store.Store) http.HandlerFunc {
 			return
 		}
 
+		// stringify some json of that sweet rsvp
+		rsvpBytes, err := json.Marshal(rsvp)
+		if err != nil {
+			log.Error("could not serialise rsvp", "err", err)
+		}
+
+		rsvpBytesPretty, err := json.MarshalIndent(rsvp, "", "  ")
+		if err != nil {
+			log.Error("could not serialise rsvp", "err", err)
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:        "formdata",
+			Value:       base64.StdEncoding.EncodeToString(rsvpBytes),
+			Quoted:      false,
+			Path:        "/",
+			Domain:      "",
+			Expires:     time.Date(2026, time.August, 28, 12, 0, 0, 0, time.UTC),
+			Secure:      true,
+			HttpOnly:    false,
+			SameSite:    http.SameSiteLaxMode,
+			Partitioned: false,
+		})
+
 		log.Info("RSVP created", "name", name, "type", rsvpType)
-		w.Write([]byte("Thanks for your RSVP!"))
+
+		// TODO: Render proper template with response data
+		w.Write([]byte("Thanks for your RSVP!<br /><pre>" + string(rsvpBytesPretty) + "</pre>"))
 	}
 }

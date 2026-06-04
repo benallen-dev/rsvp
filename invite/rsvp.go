@@ -9,8 +9,8 @@ import (
 
 // Changing this? Don't forget to update the store tables!
 type RSVP struct {
-	Id                 uuid.UUID `json:"-"`
-	Timestamp          time.Time `json:"-"`
+	Id                 uuid.UUID `json:"id"`
+	Timestamp          time.Time `json:"timestamp"`
 	Type               string    `json:"type"`
 	Name               string    `json:"name"`
 	AttendingCeremony  bool      `json:"attendingCeremony"`
