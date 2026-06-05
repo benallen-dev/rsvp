@@ -1,11 +1,11 @@
 {{define "form-day"}}
 
-<form name="response" hx-post="/rsvp" hx-target="#results" class="w-full">
+<form name="response" hx-post="/rsvp" hx-target="#rsvp-page-inner" class="w-full">
 	<input type="hidden" name="form-type" value="day">
 
 	<div class="relative mb-4">
 		<input type="text" id="name" name="name" required 
-		       class="w-full rounded px-3 border border-gray-300 pt-6 pb-2 peer bg-white hover:border-gray-400 sm:text-lg">
+		       class="w-full rounded px-3 border border-gray-300 pt-6 pb-4 peer bg-white hover:border-gray-400 sm:text-lg">
 		<label for="name" class="absolute left-4 -top-2 sm:-top-3 bg-white text-tfl-blue text-sm sm:text-base px-2 pointer-events-none">
 			Vul hier je naam in
 		</label>

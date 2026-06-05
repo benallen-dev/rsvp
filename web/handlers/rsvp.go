@@ -52,8 +52,10 @@ func init() {
 	rsvpTemplate, err = template.New("rsvp-tpl").Funcs(funcMap).ParseFiles(
 		"web/templates/base.html",
 		"web/templates/rsvp/rsvp.html",
+		"web/templates/rsvp/_rsvp-display.html",
 		"web/templates/rsvp/_form-day.html",
 		"web/templates/rsvp/_form-evening.html",
+		"web/templates/rsvp/_form-submit.html",
 	)
 	if err != nil {
 		log.Warn("RSVP templates not yet available", "err", err)
@@ -175,7 +177,9 @@ func PostRsvp(s *store.Store) http.HandlerFunc {
 
 		log.Info("RSVP created", "name", name, "type", rsvpType)
 
-		// TODO: Render proper template with response data
-		w.Write([]byte("Thanks for your RSVP!<br /><pre>" + string(rsvpBytesPretty) + "</pre>"))
+		if err := rsvpTemplate.ExecuteTemplate(w, "form-submit", dbRsvp); err != nil {
+			log.Error("Template execution failed", "err", err)
+			w.Write([]byte("Thanks for your RSVP!<br /><pre>" + string(rsvpBytesPretty) + "</pre>"))
+		}
 	}
 }

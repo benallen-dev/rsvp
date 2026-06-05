@@ -28,31 +28,34 @@
 				<h1 class="text-2xl sm:text-3xl font-bold text-tfl-blue mb-2">RSVP</h1>
 				<p>Weet je niet meer zeker of je al een reactie hebt gestuurd, of is er iets veranderd? Geen
 					probleem! Vul het formulier gewoon nog een keer in.</p>
-				{{ if .HasRsvp }}
-				<div class="mt-6 mb-12 p-4 bg-green-50 border border-green-200 rounded-lg">
-					<details class="group">
-						<summary
-							class="flex items-center gap-2 text-green-900 font-semibold hover:text-green-700 cursor-pointer group">
-							<svg class="w-5 h-5 transition-transform duration-200 group-open:rotate-45 open:rotate-90"
-								viewBox="0 0 20 20" fill="currentColor">
-								<path fill-rule="evenodd"
-									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-									clip-rule="evenodd" />
-							</svg>
-							<span>Je hebt dit formulier eerder ingevuld op {{ formatDate .ExistingRsvp.Timestamp }}</span>
-						</summary>
-						<div class="mt-4 pt-4 border-t border-green-200">
-							<pre class="text-sm text-green-900 overflow-x-auto">{{ .ExistingRsvp.String }}</pre>
-						</div>
-					</details>
-				</div>
-				{{end}}
-				<div class="w-full mt-8">
-					{{if eq .Mode "evening" }}
-					{{template "form-evening" .}}
-					{{else if eq .Mode "day" }}
-					{{template "form-day" .}}
+				<div id="rsvp-page-inner">
+					{{ if .HasRsvp }}
+					<div class="mt-6 mb-12 p-4 bg-green-50 border border-green-200 rounded-lg">
+						<details class="group">
+							<summary
+								class="flex items-center gap-2 text-green-900 font-semibold hover:text-green-700 cursor-pointer group">
+								<svg class="w-5 h-5 transition-transform duration-200 group-open:rotate-45 open:rotate-90"
+									viewBox="0 0 20 20" fill="currentColor">
+									<path fill-rule="evenodd"
+										d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+										clip-rule="evenodd" />
+								</svg>
+								<span>Je hebt dit formulier eerder ingevuld op {{ formatDate .ExistingRsvp.Timestamp
+									}}</span>
+							</summary>
+							<div class="mt-4 pt-4 border-t border-green-200">
+								{{ template "rsvp-display" .ExistingRsvp }}
+							</div>
+						</details>
+					</div>
 					{{end}}
+					<div class="w-full mt-8">
+						{{if eq .Mode "evening" }}
+						{{template "form-evening" .}}
+						{{else if eq .Mode "day" }}
+						{{template "form-day" .}}
+						{{end}}
+					</div>
 				</div>
 			</div>
 		</div>

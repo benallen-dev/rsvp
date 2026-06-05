@@ -7,7 +7,6 @@ import (
 	"github.com/charmbracelet/log"
 
 	"rsvp/config"
-	// "rsvp/invite"
 	"rsvp/store"
 )
 

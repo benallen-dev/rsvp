@@ -1,0 +1,26 @@
+{{define "form-submit"}}
+
+<div>
+	<div class="my-8">
+		<h2 class="text-3xl sm:text-4xl font-heading text-tfl-blue mb-2">
+			Bedankt voor je RSVP!
+		</h2>
+		<p class="text-tfl-gray text-base sm:text-lg">
+			We hebben je antwoord ontvangen ✓
+		</p>
+	</div>
+
+	{{ template "rsvp-display" . }}
+
+	<!-- Footer -->
+	<div class="text-center mt-6">
+		<p class="text-tfl-gray text-sm mb-4">
+			Wil je nog iets aanpassen?
+		</p>
+		<a href="/{{ .Type }}/rsvp" hx-boost="true" class="inline-block bg-tfl-blue text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-all">
+			Vul het formulier nog een keer in
+		</a>
+	</div>
+</div>
+
+{{end}}
