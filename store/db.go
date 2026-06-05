@@ -23,20 +23,20 @@ func Init(dbFile string) (*Store, func() error, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	
-	// TODO: MAKE THIS MATCH RSVP
+
 	_, err = s.db.Exec(`
         CREATE TABLE IF NOT EXISTS rsvps (
             id TEXT PRIMARY KEY,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-			rsvp_type TEXT,
-			name TEXT,
-			attending_ceremony BOOLEAN,
-			attending_reception BOOLEAN,
-			attending_dinner BOOLEAN,
+            rsvp_type TEXT,
+            name TEXT,
+            attending_ceremony BOOLEAN,
+            attending_reception BOOLEAN,
+            attending_dinner BOOLEAN,
             attending_party BOOLEAN,
             diet_notes TEXT,
-            message TEXT
+            message TEXT,
+            supersedes TEXT
         )
     `)
 
@@ -63,7 +63,6 @@ func (s *Store) DeleteAll() error {
 	_, err = s.db.Exec("DELETE from rsvps")
 	return err
 }
-
 
 //  ── Helper functions for parsing ─────────────────────────────────────────
 

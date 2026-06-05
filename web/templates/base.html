@@ -19,14 +19,44 @@
 	<script src="/js/tailwind4.min.js"></script>
 	<script src="/js/htmx.min.js"></script>
 
-	<!-- todo: vendor in fonts -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Poppins&display=swap" rel="stylesheet">
-
 	{{block "head" .}}{{end}}
 
 	<style type="text/tailwindcss">
+		@font-face {
+			font-family: "Hammersmith One";
+			src: url('/fonts/Hammersmith_One/HammersmithOne-Regular.ttf') format('truetype');
+		}
+
+		@font-face {
+			font-family: "Poppins";
+			font-weight: 300;
+			src: url('/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+		}
+		@font-face {
+			font-family: "Poppins";
+			font-weight: 400;
+			src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+		}
+
+		@font-face {
+			font-family: "Poppins";
+			font-weight: 500;
+			src: url('/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+		}
+
+		@font-face {
+			font-family: "Poppins";
+			font-weight: 600;
+			src: url('/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+		}
+
+		@font-face {
+			font-family: "Poppins";
+			font-weight: 700;
+			src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+		}
+
+
 		@theme {
 			--breakpoint-xs: 26rem;
 
