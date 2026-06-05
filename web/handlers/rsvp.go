@@ -80,14 +80,13 @@ func GetRsvp() http.HandlerFunc {
 				Value:  "",
 				MaxAge: -1,
 			})
-			cookieRsvp = &invite.RSVP{}
 		}
 
 		// Get invites and pass them to template
 		var tplData rsvpTemplateData
 		log.Infof("Route type: %s", routeType)
 		tplData.Mode = routeType
-		tplData.HasRsvp = cookieRsvp.Id != uuid.Nil
+		tplData.HasRsvp = cookieRsvp != nil // kinda gross doing a null check in go but whatever
 		tplData.ExistingRsvp = cookieRsvp
 
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -142,7 +141,7 @@ func PostRsvp(s *store.Store) http.HandlerFunc {
 
 		log.Infof("Creating RSVP: %v", rsvp)
 
-		_, err = s.CreateRSVP(rsvp)
+		dbRsvp, err := s.CreateRSVP(rsvp)
 		if err != nil {
 			log.Error("could not create rsvp", "err", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -151,7 +150,7 @@ func PostRsvp(s *store.Store) http.HandlerFunc {
 		}
 
 		// stringify some json of that sweet rsvp
-		rsvpBytes, err := json.Marshal(rsvp)
+		rsvpBytes, err := json.Marshal(dbRsvp)
 		if err != nil {
 			log.Error("could not serialise rsvp", "err", err)
 		}

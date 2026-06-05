@@ -39,7 +39,7 @@
 									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
 									clip-rule="evenodd" />
 							</svg>
-							<span>Je hebt dit formulier ingevuld op {{ formatDate .ExistingRsvp.Timestamp }}</span>
+							<span>Je hebt dit formulier eerder ingevuld op {{ formatDate .ExistingRsvp.Timestamp }}</span>
 						</summary>
 						<div class="mt-4 pt-4 border-t border-green-200">
 							<pre class="text-sm text-green-900 overflow-x-auto">{{ .ExistingRsvp.String }}</pre>
