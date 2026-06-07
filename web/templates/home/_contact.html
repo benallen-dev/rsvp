@@ -8,18 +8,19 @@
 			<h3 class="text-xl sm:text-2xl font-bold text-slate-800 mb-4">
 				{{ if eq .Mode "day" }}
 				Vragen / speechen?
-				{{ else if eq .Mode "evening" }}
+				{{ else }}
 				Vragen?
 				{{ end }}
 			</h3>
 			<p class="text-slate-600 mb-6">
 				{{ if eq .Mode "day" }}
 				Wil je een speech houden of een ander stukje doen? Of heb je andere vragen? Neem contact op met onze ceremoniemeester.
-				{{ else if eq .Mode "evening" }}
+				{{ else }}
 				Neem contact op met onze ceremoniemeester.
 				{{ end }}
 			</p>
 
+			<div class="flex flex-row justify-start gap-6 w-full">
 			<div class="flex flex-row justify-start gap-6 w-full">
 				<div class="hidden sm:flex flex-col gap-6">
 					<img src="https://media.licdn.com/dms/image/v2/D4E03AQHfUSFfWE0kJQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1728391127096?e=2147483647&v=beta&t=rS4btV0Qe4qwMCAk5zrY0M_NfsqbZa_KsJ9-NzMvksg"
